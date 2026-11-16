@@ -250,6 +250,40 @@ background-size:100% 100%}
  .page-turn.is-turning{animation:none;opacity:0}
 }
 
+
+/* Portada: foto visible y libro debajo, sin taparnos la cara */
+@media(min-width:761px){
+ #home:before{filter:saturate(1.04) brightness(1.05);background-position:center 44%}
+ #home:after{background:linear-gradient(90deg,rgba(16,17,18,.38),rgba(13,15,16,.12) 50%,rgba(16,17,18,.4)),linear-gradient(180deg,rgba(10,12,15,.26),rgba(10,12,15,.30) 75%,rgba(10,12,15,.55))}
+ #home .home-center{max-width:620px;background:linear-gradient(150deg,rgba(28,26,27,.76),rgba(23,21,23,.81));backdrop-filter:blur(3px)}
+}
+@media(max-width:760px){
+ #home{min-height:100svh;height:auto;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;padding:16px 12px max(20px,env(safe-area-inset-bottom));background:#171a18}
+ #home:before{inset:0 0 auto;top:0;left:0;right:0;height:43svh;background:url('./foto-nuestra.jpg') center 41%/cover no-repeat;filter:saturate(1.10) brightness(1.08);animation:none}
+ #home:after{inset:0;background:linear-gradient(180deg,rgba(12,14,15,.34) 0%,rgba(12,14,15,.06) 14%,rgba(12,14,15,.025) 27%,rgba(19,21,22,.34) 37%,#171a18 44%,#171a18 100%)}
+ #home .home-top{position:absolute;top:20px;left:17px;right:17px;width:auto;z-index:5}
+ #home .home-brand{font-size:10px;letter-spacing:.13em;text-shadow:0 1px 9px #0009}
+ #home .brand-seal{width:37px;height:37px;background:#17191a4a;backdrop-filter:blur(8px)}
+ #home .home-center{width:min(94vw,520px);max-width:520px;margin:clamp(260px,38svh,420px) auto 14px;padding:27px 22px 20px;border-radius:35% 35% 15px 15px / 11% 11% 15px 15px;background:linear-gradient(160deg,rgba(29,26,29,.96),rgba(21,22,25,.98));box-shadow:0 0 0 1px #f4e1ba2a,0 0 0 7px #f0d8ad0a,0 20px 55px #0008;backdrop-filter:none}
+ #home .book-flourish{font-size:12px;letter-spacing:.12em;margin:0 auto 13px}
+ #home .home-mini{font-size:9px;letter-spacing:.15em;margin-bottom:12px}
+ #home .home-title{font-size:clamp(3.85rem,13vw,5.1rem);line-height:.78}
+ #home .home-rule{margin:19px 0 16px;width:120px}
+ #home .home-desc{font-size:clamp(1.22rem,4.9vw,1.48rem);line-height:1.17;max-width:330px;margin-bottom:22px}
+ #home .key-form{width:min(100%,365px)}
+ #home .home-bottom{position:relative;z-index:5;width:100%;margin-top:auto;min-height:35px;padding:0 10px;color:#eee2ce}
+ #home .fairy-cover-branch{opacity:.09}
+ #home .home-glimmer{opacity:.15}
+}
+@media(max-width:420px){
+ #home .home-center{margin-top:clamp(248px,37svh,342px);padding:26px 17px 18px}
+ #home .home-title{font-size:clamp(3.45rem,14.5vw,4.45rem)}
+ #home .home-desc{font-size:1.2rem;line-height:1.17}
+ #home .key-form{min-height:54px;padding:5px 5px 5px 15px}
+ #home .key-form button{height:42px;flex-basis:42px}
+ #home .book-flourish{letter-spacing:.06em}
+}
+
 </style>
 </head>
 <body>
