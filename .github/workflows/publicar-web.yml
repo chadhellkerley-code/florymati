@@ -1,0 +1,70 @@
+name: Publish Mati y Flor assets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'nuestros-recuerdos-4-cartas.zip'
+      - 'florymati-listo-para-subir.zip'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: main
+          persist-credentials: true
+      - name: Extract full website archive
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          archives = [
+              Path('nuestros-recuerdos-4-cartas.zip'),
+              Path('florymati-listo-para-subir.zip'),
+          ]
+          archive = next((p for p in archives if p.is_file()), None)
+          if archive is None:
+              raise SystemExit('No website ZIP has been uploaded')
+
+          required = {
+              'index.html', 'LEEME.txt', 'encontrarte-1.jpg',
+              'encontrarte-2.jpg', 'encontrarte-poster.jpg',
+              'foto-nuestra.jpg', 'recuerdo-espejo.jpg',
+              'siempre-1.jpg', 'siempre-2.jpg', 'siempre-3.jpg',
+              'siempre-4.jpg', 'siempre-5.jpg',
+              'musica-encontrarte.mp3', 'musica-recuerdos.mp3',
+              'encontrarte-final.mp4',
+          }
+          with ZipFile(archive) as z:
+              available = {
+                  Path(info.filename).name: info
+                  for info in z.infolist()
+                  if not info.is_dir() and Path(info.filename).name in required
+              }
+              missing = required - available.keys()
+              if missing:
+                  raise SystemExit('ZIP missing required files: ' + ', '.join(sorted(missing)))
+              for name in sorted(required):
+                  Path(name).write_bytes(z.read(available[name]))
+
+          for path in archives:
+              path.unlink(missing_ok=True)
+          print('Prepared all 15 original website files')
+          PY
+      - name: Commit site assets to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Publicar fotos, musica y video de Mati y Flor"
+            git push origin HEAD:main
+          fi
