@@ -1,0 +1,16 @@
+Nuestros recuerdos — cuatro experiencias
+
+Abrí index.html para probar el sitio o subí esta carpeta completa a Vercel (proyecto estático sin framework).
+
+Palabras secretas:
+- espejo: foto, mensaje, música
+- encontrarte: dos fotos, mensaje, video, música
+- el gran pórtico: juego de nueve preguntas y premio de película
+- siempre: tres fotos de espejo, dos del auto y carta de aliento
+
+IMPORTANTE SOBRE LA TERCERA CARTA:
+Esta versión se reconstruyó a partir de las 9 respuestas acordadas, pero no se pudo recuperar el último ZIP de la tercera carta con las preguntas exactamente formuladas; revisá sus textos y opciones antes de compartir. La pista musical Him & I tampoco está incluida porque no estaba en el ZIP disponible.
+
+Esta entrega es un ZIP para revisar, NO es un despliegue a Vercel.
+
+Si compartís el sitio públicamente, confirmá que tenés permiso para distribuir los archivos de audio incluidos. El formulario de claves es una sorpresa visual, no seguridad real de acceso; los recursos estáticos son descargables por quien posea la URL.
