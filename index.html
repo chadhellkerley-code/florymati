@@ -1,617 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#211d1b" />
-  <meta name="description" content="Un lugar para guardar nuestros recuerdos." />
-  <meta name="robots" content="noindex, nofollow, noarchive" />
-  <title>nuestros recuerdos</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    :root { color-scheme: dark; --paper:#fff9f4; --ink:#3e302f; --white:#fff9f4; --soft:#eacdc3; }
-    *, *::before, *::after { box-sizing:border-box; }
-    html, body { margin:0; min-height:100%; }
-    body { font-family:"DM Sans",system-ui,sans-serif; color:var(--white); background:#211d1b; }
-    button, input { font:inherit; }
-    button { cursor:pointer; }
-    main { position:relative; min-height:100svh; display:grid; place-items:center; overflow:hidden; isolation:isolate; }
-    .photo-layer { position:absolute; inset:0; z-index:-3; background:#352d2b; }
-    .photo-layer::before { content:""; position:absolute; inset:-2%; background:url('./foto-nuestra.jpg') center center / cover no-repeat; animation:photo-in 2.7s ease-out both; }
-    .photo-layer::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(16,12,12,.27),rgba(13,12,12,.41) 44%,rgba(13,10,10,.62)); }
-    .film { position:absolute; inset:0; z-index:-1; opacity:.24; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.76' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.22' filter='url(%23n)'/%3E%3C/svg%3E"); }
-    .opening { width:min(91vw,720px); display:grid; justify-items:center; text-align:center; transform:translateY(6px); }
-    .title { margin:0; font-family:"Cormorant Garamond",Georgia,serif; font-size:clamp(3.6rem,10vw,7.1rem); font-weight:500; line-height:.98; letter-spacing:-.045em; text-wrap:balance; text-shadow:0 3px 28px rgba(0,0,0,.25); opacity:0; transform:translateY(26px); animation:title-enter 1.25s .48s cubic-bezier(.22,1,.36,1) forwards,title-rise 1.35s 2.2s cubic-bezier(.22,1,.36,1) forwards; }
-    .entry { width:min(100%,390px); opacity:0; transform:translateY(26px); margin-top:30px; animation:input-enter 1.05s 2.75s cubic-bezier(.22,1,.36,1) forwards; }
-    .entry-wrap { position:relative; }
-    .keyword { display:block; width:100%; min-height:60px; padding:18px 62px 18px 23px; border-radius:22px; outline:none; font:400 15px/1.45 "DM Sans",system-ui,sans-serif; color:var(--white); background:rgba(255,255,255,.135); border:1px solid rgba(255,255,255,.42); text-align:center; letter-spacing:.012em; box-shadow:0 12px 34px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.08); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); transition:border-color .25s,background .25s,box-shadow .25s; }
-    .keyword::placeholder { color:rgba(255,250,244,.87); opacity:1; }
-    .keyword:focus { background:rgba(255,255,255,.2); border-color:rgba(255,255,255,.86); box-shadow:0 0 0 4px rgba(255,255,255,.11),0 18px 36px rgba(0,0,0,.18); }
-    .submit-key { position:absolute; right:7px; top:7px; width:46px; height:46px; border:none; border-radius:16px; background:rgba(255,249,244,.9); color:#4e3734; display:grid; place-items:center; transition:transform .2s,background .2s; }
-    .submit-key:hover { background:white; transform:translateX(2px); }
-    .submit-key:focus-visible, .close:focus-visible, .sound:focus-visible, .flip-card:focus-visible { outline:3px solid #f7c8b9; outline-offset:3px; }
-    .submit-key svg { width:20px; height:20px; }
-    .message { min-height:18px; margin:12px 0 0; font-size:12px; color:#fff2ec; opacity:0; transition:opacity .3s; }
-    .message.visible { opacity:1; }
-    .footer { position:absolute; bottom:max(20px,env(safe-area-inset-bottom)); left:0; width:100%; text-align:center; font-size:11px; letter-spacing:.18em; color:rgba(255,255,255,.68); opacity:0; animation:soft-enter 1s 3.8s ease forwards; }
-    /* Recuadro secreto: aparece solamente después de acertar la palabra. */
-    .memory { position:fixed; inset:0; z-index:10; display:grid; place-items:center; padding:calc(26px + env(safe-area-inset-top)) 15px calc(22px + env(safe-area-inset-bottom)); background:radial-gradient(ellipse at 48% 0%,#55403f 0%,#2d2425 50%,#1a1719 100%); opacity:0; visibility:hidden; pointer-events:none; transform:scale(1.015); transition:opacity .9s ease,transform .9s ease,visibility 0s .9s; overflow-y:auto; }
-    .memory.active { opacity:1; visibility:visible; pointer-events:auto; transform:scale(1); transition:opacity .9s ease,transform .9s ease,visibility 0s; }
-    .memory-inner { width:min(100%,380px); display:flex; flex-direction:column; align-items:center; gap:15px; margin:auto; }
-    .eyebrow { margin:0; font-size:10px; font-weight:500; letter-spacing:.25em; color:#e5c7be; text-align:center; text-transform:lowercase; }
-    .memory-title { margin:0 0 2px; font-family:"Cormorant Garamond",Georgia,serif; font-size:clamp(2.3rem,8vw,3.3rem); font-weight:500; letter-spacing:-.03em; line-height:1; }
-    .flip-card { width:min(82vw,340px); height:min(60svh,490px); min-height:340px; position:relative; padding:0; background:transparent; border:0; color:inherit; perspective:1200px; -webkit-tap-highlight-color:transparent; }
-    .flip-inner { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform 1.15s cubic-bezier(.2,.8,.15,1); }
-    .flip-card.flipped .flip-inner { transform:rotateY(180deg); }
-    .flip-face { position:absolute; inset:0; overflow:hidden; border-radius:14px; backface-visibility:hidden; -webkit-backface-visibility:hidden; box-shadow:0 24px 55px rgba(0,0,0,.35); }
-    .flip-front { display:grid; place-items:center; background:#302626; }
-    .flip-front img { display:block; width:100%; height:100%; object-fit:contain; }
-    .flip-back { display:flex; flex-direction:column; justify-content:center; align-items:center; padding:clamp(21px,7vw,38px); text-align:center; background:linear-gradient(145deg,#fffaf5 0%,#f4e7df 100%); color:var(--ink); transform:rotateY(180deg); }
-    .flip-back::before, .flip-back::after { content:"✦"; position:absolute; color:#a8766e; font-size:14px; }
-    .flip-back::before { top:24px; }
-    .flip-back::after { bottom:24px; }
-    .letter-text { margin:0; font-family:"Cormorant Garamond",Georgia,serif; font-size:clamp(1.35rem,4.9vw,1.86rem); line-height:1.25; font-weight:500; letter-spacing:-.016em; }
-    .letter-text span { display:block; margin-bottom:12px; }
-    .letter-text span:last-child { margin-top:20px; margin-bottom:0; font-size:clamp(1.65rem,6vw,2.2rem); font-style:italic; }
-    .tap-hint { min-height:20px; margin:0; font-size:12px; font-weight:400; letter-spacing:.05em; text-align:center; color:#f1d7cd; opacity:0; transform:translateY(7px); transition:opacity 1s ease,transform 1s ease; }
-    .memory.active .tap-hint { opacity:1; transform:translateY(0); transition-delay:1.1s; }
-    .close, .sound { position:absolute; z-index:11; top:max(16px,env(safe-area-inset-top)); width:39px; height:39px; border:1px solid rgba(255,255,255,.21); border-radius:50%; display:grid; place-items:center; color:#fff4ef; background:rgba(255,255,255,.08); }
-    .close { right:17px; font-size:24px; line-height:1; }
-    .sound { left:17px; }
-    .sound svg { width:17px; height:17px; }
-    .visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-    @keyframes photo-in { from { opacity:.2; transform:scale(1.045); } to { opacity:1; transform:scale(1); } }
-    @keyframes title-enter { to { opacity:1; transform:translateY(0); } }
-    @keyframes title-rise { to { opacity:1; transform:translateY(-65px); } }
-    @keyframes input-enter { to { opacity:1; transform:translateY(-33px); } }
-    @keyframes soft-enter { to { opacity:1; } }
-    @media (max-width:560px) {
-      .opening { width:min(91vw,400px); }
-      .title { font-size:clamp(3.5rem,15vw,5.3rem); line-height:.9; }
-      .entry { width:min(100%,335px); margin-top:27px; }
-      .keyword { border-radius:19px; padding-left:18px; }
-      .flip-card { width:min(83vw,330px); height:min(62svh,493px); }
-    }
-    @media (max-height:700px) {
-      .memory-inner { gap:9px; }
-      .flip-card { height:55svh; min-height:295px; }
-      .letter-text { font-size:clamp(1.17rem,3.7vh,1.65rem); }
-      .letter-text span { margin-bottom:7px; }
-      .letter-text span:last-child { margin-top:12px; }
-    }
-    @media (prefers-reduced-motion:reduce) {
-      *,*::before,*::after { animation-duration:.01ms !important; animation-delay:.01ms !important; transition-duration:.01ms !important; transition-delay:0ms !important; }
-      .title { opacity:1; transform:translateY(-65px); }
-      .entry { opacity:1; transform:translateY(-33px); }
-      .footer { opacity:1; }
-      .memory.active .tap-hint { opacity:1; transform:none; }
-    }
-
-    /* Segundo recuerdo: dos fotografías que se dan vuelta, y un video final. */
-    .memory-story { background:radial-gradient(ellipse at 45% -10%,#604647 0%,#322728 45%,#1a1719 100%); }
-    .memory-story .memory-inner { width:min(100%,540px); gap:12px; }
-    .story-stage { display:none; width:100%; flex-direction:column; align-items:center; gap:15px; }
-    .story-stage.active { display:flex; animation:story-appear .68s cubic-bezier(.2,.7,.3,1) both; }
-    .memory-story .memory-title { font-size:clamp(2.4rem,8vw,3.4rem); margin:0 0 5px; }
-    .story-card { width:min(91vw,500px); height:min(56svh,360px); min-height:240px; }
-    .story-card .flip-front { background:#252223; }
-    .story-card .flip-front img { object-fit:contain; }
-    .story-card .flip-back { padding:clamp(20px,6vw,44px); }
-    .story-card .letter-text { font-size:clamp(1.8rem,6vw,2.55rem); line-height:1.2; }
-    .story-card .flip-back::before { top:18px; }
-    .story-card .flip-back::after { bottom:18px; }
-    .memory-story .tap-hint { min-height:24px; font-size:13px; opacity:1; transform:translateY(0); color:#f7e0d7; margin:5px 0; }
-    .memory-story .tap-hint.is-next { font-style:italic; }
-    .story-counter { margin:0; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:#dec5bb; }
-    .finale-prelude { display:flex; flex-direction:column; align-items:center; gap:22px; text-align:center; min-height:45svh; justify-content:center; }
-    .finale-symbol { color:#edcdbf; font-size:33px; font-family:Georgia,serif; opacity:.9; }
-    .finale-prompt { font-family:"Cormorant Garamond",Georgia,serif; font-size:clamp(2.6rem,10vw,4.6rem); line-height:.95; font-weight:500; margin:0; }
-    .finale-open { border:1px solid rgba(255,255,255,.55); border-radius:100px; color:#fff8f4; background:rgba(255,255,255,.1); min-height:53px; padding:12px 25px; font-size:13px; font-weight:500; letter-spacing:.02em; transition:background .25s,transform .25s; }
-    .finale-open:hover { background:rgba(255,255,255,.2); transform:translateY(-2px); }
-    .finale-open:focus-visible { outline:3px solid #f7c8b9; outline-offset:4px; }
-    .finale-video { display:none; flex-direction:column; align-items:center; gap:17px; width:100%; }
-    .finale-video.visible { display:flex; animation:story-appear .8s cubic-bezier(.2,.7,.3,1) both; }
-    .finale-heading { margin:5px 0 0; max-width:390px; text-align:center; font-family:"Cormorant Garamond",Georgia,serif; font-size:clamp(1.9rem,7.3vw,2.85rem); font-weight:500; line-height:1.06; letter-spacing:-.02em; color:#fff8f4; }
-    .video-shell { overflow:hidden; background:#110e10; border-radius:16px; border:1px solid rgba(255,255,255,.16); box-shadow:0 24px 55px rgba(0,0,0,.34); width:min(76vw,354px); }
-    .video-shell video { width:100%; max-height:62svh; display:block; aspect-ratio:512/682; object-fit:contain; background:#110e10; }
-    .return-hint { font-size:11px; text-align:center; margin:0; color:#d1b4ac; }
-    .memory-story .sound svg { width:18px; height:18px; }
-    @keyframes story-appear { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
-    @media (max-width:560px) {
-      .story-card { width:min(90vw,490px); height: min(49svh,335px); min-height:210px; }
-      .story-card .letter-text { font-size:clamp(1.6rem,7.2vw,2.35rem); }
-      .finale-video { gap:11px; }
-      .video-shell { width:min(79vw,345px); }
-      .video-shell video { max-height:59svh; }
-      .finale-heading { font-size:clamp(1.85rem,7.7vw,2.6rem); }
-    }
-    @media (max-height:650px) {
-      .memory-story .memory-inner { gap:7px; }
-      .story-card { height: min(43svh,310px); min-height:165px; }
-      .finale-prelude { min-height:40svh; gap:10px; }
-      .video-shell video { max-height:49svh; }
-      .finale-heading { font-size:clamp(1.7rem,6vw,2.3rem); }
-    }
-
-    /* Tercer recuerdo: pequeño juego privado, nueve preguntas y una cita. */
-    .memory-quiz { background:radial-gradient(ellipse at 50% 0%,#4b3a3b 0%,#2a2224 55%,#171519 100%); }
-    .quiz-shell { width:min(100%,440px); margin:auto; text-align:center; display:flex; flex-direction:column; align-items:center; gap:20px; }
-    .quiz-progress { display:flex; gap:7px; justify-content:center; width:100%; }
-    .quiz-progress span { height:3px; flex:1; background:rgba(251,233,224,.22); border-radius:10px; max-width:30px; transition:background .25s; }
-    .quiz-progress span.done { background:#eccbbd; }
-    .quiz-level { font-size:10px; letter-spacing:.27em; color:#e6c7be; text-transform:uppercase; margin:6px 0 0; }
-    .quiz-heading { font:500 clamp(2.5rem,9vw,3.6rem)/.97 'Cormorant Garamond',Georgia,serif; letter-spacing:-.04em; margin:0; }
-    .quiz-question { font:500 clamp(1.7rem,6vw,2.4rem)/1.12 'Cormorant Garamond',Georgia,serif; margin:18px 0 6px; color:#fff8f2; text-wrap:balance; }
-    .quiz-options { width:100%; display:grid; gap:11px; }
-    .quiz-choice { min-height:56px; padding:14px 17px; border:1px solid rgba(255,236,223,.28); border-radius:18px; background:rgba(255,255,255,.07); color:#fff7f2; text-align:center; font-size:14px; line-height:1.35; transition:background .2s,border-color .2s,transform .2s; }
-    .quiz-choice:hover,.quiz-choice:focus-visible { background:rgba(255,255,255,.14); border-color:rgba(255,236,223,.75); outline:none; }
-    .quiz-choice.wrong { border-color:#c78d89; animation:quiz-shake .28s linear; }
-    .quiz-feedback { min-height:26px; margin:0; font-size:12px; color:#e7c8c0; }
-    .quiz-complete { display:none; flex-direction:column; gap:20px; align-items:center; width:100%; }
-    .quiz-complete.show { display:flex; animation:story-appear .55s ease both; }
-    .quiz-prize { font:500 clamp(2.4rem,9vw,3.7rem)/.98 'Cormorant Garamond',Georgia,serif; margin:0; }
-    .movie-links { display:grid; gap:10px; width:100%; }
-    .movie-links a { text-decoration:none; color:#fff8f4; border:1px solid rgba(255,255,255,.4); border-radius:15px; padding:16px; font-size:14px; background:rgba(255,255,255,.07); }
-    .movie-links a:focus-visible { outline:2px solid #e7c0b0; outline-offset:3px; }
-    @keyframes quiz-shake { 0%,100% {transform:translateX(0)} 30% {transform:translateX(-5px)} 70% {transform:translateX(5px)} }
-    /* Cuarto recuerdo: galería en dos actos, con fotos intactas. */
-    .memory-journey { display:block; padding:0; background:radial-gradient(ellipse at 55% 0%,#4e3b3d 0%,#282124 48%,#171416 100%); overflow-x:hidden; scroll-behavior:smooth; }
-    .journey-wrap { width:min(100%,485px); min-height:100%; margin:auto; padding:72px 22px 58px; }
-    .journey-header { text-align:center; padding:14px 0 24px; }
-    .journey-eyebrow { font:500 10px/1.5 'DM Sans',sans-serif; letter-spacing:.23em; color:#e7c9bd; text-transform:uppercase; margin:0 0 12px; }
-    .journey-title { font:500 clamp(3.25rem,12vw,5rem)/.89 'Cormorant Garamond',serif; letter-spacing:-.035em; margin:0; }
-    .journey-subtitle { font:400 13px/1.6 'DM Sans',sans-serif; color:#e6c8be; max-width:295px; margin:18px auto 0; }
-    .journey-stage { display:none; }
-    .journey-stage.show { display:block; animation:journey-enter .65s cubic-bezier(.2,.75,.2,1) both; }
-    .journey-photo { display:block; margin:0 auto 19px; padding:8px 8px 27px; width:100%; max-width:385px; border-radius:8px; background:#f8f2e9; box-shadow:0 16px 38px rgba(0,0,0,.23); transform:rotate(-.65deg); }
-    .journey-photo:nth-of-type(even) { transform:rotate(.55deg); }
-    .journey-photo img { display:block; width:100%; height:auto; border-radius:3px; }
-    .journey-photo figcaption { color:#8b7b76; font:400 10px/1.3 'DM Sans',sans-serif; letter-spacing:.08em; margin:13px 8px -7px; text-align:center; }
-    .journey-card { position:relative; display:block; width:100%; max-width:385px; border:0; padding:0; margin:0 auto 12px; background:transparent; color:#302727; text-align:center; cursor:pointer; perspective:1200px; -webkit-tap-highlight-color:transparent; }
-    .journey-card.portrait { aspect-ratio: 1152 / 1536; }
-    .journey-card.landscape { aspect-ratio: 1536 / 1152; }
-    .journey-card-inner { display:block; position:absolute; inset:0; transform-style:preserve-3d; transition:transform 1.05s cubic-bezier(.16,.82,.17,1); }
-    .journey-card.flipped .journey-card-inner { transform:rotateY(180deg); }
-    .journey-face { position:absolute; inset:0; overflow:hidden; border-radius:8px; backface-visibility:hidden; -webkit-backface-visibility:hidden; box-shadow:0 19px 47px rgba(0,0,0,.3); }
-    .journey-front { background:#eee4d9; padding:8px 8px 26px; }
-    .journey-front img { width:100%; height:100%; object-fit:cover; object-position:center; border-radius:3px; display:block; }
-    .journey-front::after { content:'un pedacito de nosotros'; position:absolute; left:0; bottom:8px; right:0; font:400 10px/1 'DM Sans',sans-serif; color:#938079; letter-spacing:.04em; }
-    .journey-back { transform:rotateY(180deg); background:linear-gradient(147deg,#fffaf5,#f2e2da); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:27px 27px; }
-    .journey-back::before { content:'✦'; position:absolute; top:18px; color:#b18d7e; }
-    .journey-back p { font:500 clamp(1.58rem,5vw,2.4rem)/1.15 'Cormorant Garamond',Georgia,serif; margin:0; letter-spacing:-.018em; }
-    .journey-back small { display:block; font:400 10px/1.5 'DM Sans',sans-serif; color:#9a7770; letter-spacing:.1em; margin-top:19px; }
-    .journey-card.landscape .journey-back p { font-size:clamp(1.5rem,5vw,2.05rem); }
-    .journey-tap { margin:18px auto 0; text-align:center; font:400 12px/1.5 'DM Sans',sans-serif; letter-spacing:.02em; color:#f6dfd4; }
-    .journey-arrow { text-align:center; padding:17px 0 22px; color:#c9a99d; font-size:25px; }
-    .journey-ending { min-height:75svh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:25px; padding:20px 8px 70px; }
-    .journey-ending .star { font-size:30px; color:#ecc9b7; }
-    .journey-ending h3 { font:500 clamp(2.4rem,10vw,4.4rem)/1.04 'Cormorant Garamond',Georgia,serif; letter-spacing:-.025em; margin:0; color:#fff8f3; }
-    .journey-ending p { font:400 12px/1.6 'DM Sans',sans-serif; color:#d9bcb1; margin:0; }
-    .journey-restart { color:#fff8f2; font:400 12px/1 'DM Sans',sans-serif; padding:13px 20px; border:1px solid #a68b85; border-radius:100px; background:transparent; }
-    .journey-restart:focus-visible,.journey-card:focus-visible {outline:3px solid #f7c8b9;outline-offset:4px;}
-    @keyframes journey-enter { from {opacity:0;transform:translateY(18px)} to {opacity:1;transform:translateY(0)} }
-    @media (max-width:390px) { .journey-wrap{padding-inline:15px}.journey-back{padding:16px 20px}.journey-back p{font-size:1.53rem}.journey-card.landscape .journey-back p{font-size:1.33rem} }
-    @media (prefers-reduced-motion:reduce) { .journey-stage.show {animation:none} .journey-card-inner {transition-duration:.01ms} }
-
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#191916"><meta name="robots" content="noindex,nofollow,noarchive">
+<title>Un lugar para nosotros · Mati y Flor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#f7f2e9;--ink:#29241f;--pink:#e9c6bf;--gold:#e8c59a;--serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',sans-serif}
+*{box-sizing:border-box}html{background:#191916;scroll-behavior:smooth}body{margin:0;color:var(--cream);font-family:var(--sans);overflow-x:hidden}button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid #eed3ae;outline-offset:4px}img{display:block;max-width:100%}a{color:inherit}h1,h2,h3,p{margin-top:0}
+:root{--ease:cubic-bezier(.18,.72,.25,1)}
+.grain{position:absolute;inset:0;pointer-events:none;z-index:4;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.66' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.28' filter='url(%23n)'/%3E%3C/svg%3E")}
+button.ghost{border:1px solid rgba(255,255,255,.42);border-radius:100px;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);color:white;padding:12px 21px;font-size:12px;letter-spacing:.07em;transition:background .25s,transform .25s}button.ghost:hover{background:rgba(255,255,255,.2);transform:translateY(-2px)}button.pill{border:none;border-radius:100px;color:#372c28;background:#f4e3d7;padding:15px 26px;letter-spacing:.04em;font-size:13px;font-weight:600;box-shadow:0 10px 28px #0002;transition:transform .25s}button.pill:hover{transform:translateY(-3px)}button.pill:disabled{opacity:.42;cursor:not-allowed;transform:none}
+.overline{font-size:10px;font-weight:700;letter-spacing:.27em;text-transform:uppercase;margin-bottom:19px}.handwritten{font-family:var(--serif);font-style:italic;font-weight:400}.hint{font-size:12px;letter-spacing:.04em;opacity:.75;line-height:1.65}
+/* PORTADA */
+#home{min-height:100svh;display:flex;flex-direction:column;justify-content:space-between;align-items:center;isolation:isolate;overflow:hidden;position:relative;background:#262923;padding:clamp(24px,3vw,38px) 24px max(24px,env(safe-area-inset-bottom))}
+#home:before{content:"";position:absolute;inset:-3%;z-index:-3;background:url('./foto-nuestra.jpg') center 43%/cover no-repeat;animation:softZoom 16s ease-in-out infinite alternate}
+#home:after{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(18,22,20,.53),rgba(14,21,20,.43) 30%,rgba(14,17,17,.68) 78%,rgba(8,12,12,.8)),radial-gradient(ellipse 80% 65% at 50% 60%,transparent 10%,rgba(0,0,0,.23) 100%)}
+.home-top,.home-bottom{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:5}.home-brand{display:flex;align-items:center;gap:12px;color:#fff5e9;font-size:12px;letter-spacing:.2em;text-transform:uppercase}.brand-seal{display:grid;place-items:center;width:35px;height:35px;border:1px solid #ffffff95;border-radius:50%;font-family:var(--serif);font-size:21px;letter-spacing:-.06em}.top-label{font-size:10px;letter-spacing:.22em;opacity:.7;text-transform:uppercase}.home-center{display:flex;flex-direction:column;align-items:center;text-align:center;max-width:750px;z-index:3;padding:54px 0 65px;animation:floatIn 1.4s .1s both var(--ease)}.home-mini{color:#f1d5c7;font-weight:500;font-size:11px;letter-spacing:.32em;text-transform:uppercase;margin-bottom:21px}.home-title{font:500 clamp(5.2rem,13vw,9.5rem)/.73 var(--serif);letter-spacing:-.06em;margin:0;color:#fff8ec;text-shadow:0 13px 45px #0005}.home-title em{display:block;font-size:.92em;font-weight:400;margin-left:14%;margin-top:13px}.home-rule{width:60px;height:1px;background:var(--gold);margin:37px 0 24px}.home-desc{font:400 clamp(1.35rem,3vw,1.75rem)/1.2 var(--serif);letter-spacing:.015em;color:#f7e8de;max-width:370px;margin:0 0 31px}.key-form{display:flex;width:min(100%,400px);min-height:58px;align-items:center;background:rgba(250,242,235,.13);border:1px solid rgba(255,255,255,.47);border-radius:100px;padding:6px 6px 6px 24px;backdrop-filter:blur(17px);box-shadow:0 20px 42px #0002}.key-form input{flex:1;min-width:0;border:0;outline:0;color:white;background:none;font-size:13px;text-align:left}.key-form input::placeholder{color:#ffffffd9}.key-form button{border:none;border-radius:50%;background:#f4e7d8;color:#574239;flex:0 0 44px;height:44px;font-size:25px;line-height:1;transition:transform .3s}.key-form button:hover{transform:scale(1.07)}.key-error{height:23px;color:#ffe5d8;font-size:12px;margin:9px 0 0;opacity:0;transition:opacity .2s}.key-error.show{opacity:1}.home-bottom{opacity:.8;font-size:10px;letter-spacing:.21em;text-transform:uppercase}.home-bottom>span:last-child{font-family:var(--serif);font-size:21px;letter-spacing:0}.home-glimmer{position:absolute;z-index:0;pointer-events:none;color:#ffead477;font:26px var(--serif);animation:twinkle 6s ease-in-out infinite}.g1{top:25%;left:11%}.g2{top:35%;right:15%;animation-delay:1.5s}.g3{bottom:24%;left:19%;animation-delay:3s}
+.preview-switch{position:fixed;right:16px;bottom:15px;z-index:25;display:none;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:min(94vw,650px);padding:8px;border:1px solid #ffffff45;border-radius:18px;background:#171819de;backdrop-filter:blur(20px);box-shadow:0 10px 34px #0006}.preview-switch.show{display:flex}.preview-switch span{font-size:10px;letter-spacing:.1em;color:#e5d6cb;margin:0 6px}.preview-switch button{color:#f8eee4;border:1px solid #ffffff29;background:#ffffff0e;border-radius:12px;padding:10px;font-size:11px}
+/* SHARED WORLDS */
+.world{position:fixed;inset:0;z-index:10;overflow-y:auto;overscroll-behavior:contain;display:none;opacity:0;isolation:isolate}.world.active{display:block;animation:worldIn .8s both var(--ease)}.world-top{position:sticky;top:0;z-index:20;height:70px;padding:15px 21px;display:flex;justify-content:space-between;align-items:center;pointer-events:none}.world-top>*{pointer-events:auto}.back{display:inline-flex;align-items:center;gap:11px;color:inherit;background:none;border:0;padding:8px 2px;font-size:11px;text-transform:uppercase;letter-spacing:.16em}.back .arr{font-size:24px;font-family:var(--serif)}.chapter{font-size:10px;letter-spacing:.25em;text-transform:uppercase;opacity:.72}.sound{width:35px;height:35px;border:1px solid currentColor;border-radius:50%;background:transparent;color:inherit;font-size:15px}.world-title{font:500 clamp(4.3rem,10vw,8rem)/.86 var(--serif);letter-spacing:-.056em;margin:0}.world-sub{font:400 clamp(1.25rem,2.8vw,1.9rem)/1.22 var(--serif);max-width:460px;opacity:.83}
+/* ESPEJO */
+#espejo{background:radial-gradient(ellipse at 70% 32%,#443b39 0,#28282a 50%,#1c1f23 100%);color:#f8f0e6}#espejo:before{content:"";position:fixed;inset:0;opacity:.26;pointer-events:none;background:repeating-linear-gradient(120deg,transparent 0 50px,#fff1 50px 51px,transparent 52px 150px)}.mirror-main{min-height:calc(100svh - 70px);width:min(1160px,100%);margin:auto;padding:20px 6vw 65px;display:grid;grid-template-columns:minmax(250px,.84fr) minmax(270px,1.16fr);align-items:center;gap:clamp(24px,5vw,100px)}.mirror-copy>.overline{color:#d2b6ad}.mirror-copy .world-title{margin-bottom:24px}.mirror-copy .world-sub{color:#dfcfca}.mirror-frame{position:relative;width:min(100%,410px);height:min(69svh,585px);min-height:380px;margin:auto;padding:15px;border:9px solid #aa8b67;border-radius:50% 50% 13px 13px / 27% 27% 13px 13px;box-shadow:0 0 0 2px #f5db9a65,inset 0 0 0 2px #544532,0 24px 100px #0009,0 0 66px #b2986930;background:linear-gradient(125deg,#8c6a48,#e7c89c 26%,#705439 45%,#e0bd8d 76%,#7f6648)}.mirror-glass{position:relative;width:100%;height:100%;border-radius:50% 50% 7px 7px / 26% 26% 7px 7px;overflow:hidden;background:#353537;box-shadow:inset 0 0 35px #131313b0}.mirror-glass img{width:100%;height:100%;object-fit:cover;object-position:center}#fog-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}.mirror-sheen{position:absolute;inset:0;pointer-events:none;background:linear-gradient(113deg,#fff3 0,#fff1 12%,transparent 34%,transparent 78%,#ffffff1c);mix-blend-mode:screen}.mirror-message{margin-top:18px;max-width:400px;border-left:1px solid #bda697;padding:0 0 0 20px;opacity:0;transform:translateY(10px);transition:.7s}.mirror-message.shown{opacity:1;transform:none}.mirror-message p{font:400 clamp(1.4rem,3vw,1.8rem)/1.22 var(--serif);margin:0}.mirror-message strong{display:block;font:500 13px var(--sans);letter-spacing:.1em;margin-top:13px;color:#e3c7b7}.mirror-action{margin-top:22px}
+/* ENCONTRARTE / JARDIN */
+#encontrarte{color:#374238;background:linear-gradient(180deg,#f2eae1 0,#f7e8da 35%,#cfdfc4 73%,#99b298 100%)}#encontrarte:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 17% 17%,#fff9 0 12%,transparent 32%),radial-gradient(circle at 87% 21%,#ffe1d2 0 10%,transparent 34%)}#encontrarte .world-top{color:#405346}#encontrarte .world-top .sound{border-color:#40534688}.garden-main{position:relative;max-width:1100px;margin:auto;text-align:center;padding:2vh 20px 100px}.garden-main .overline{color:#947a78}.garden-main .world-title{margin-bottom:20px;color:#566758}.garden-main .world-sub{max-width:480px;margin:0 auto 2px;color:#687768}.flower-field{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:clamp(1px,3.5vw,46px);height:255px;margin:30px auto 0;max-width:700px;border-bottom:1px solid #64836150}.flower{position:relative;width:130px;height:215px;flex:1;max-width:180px;transform:translateY(var(--offset,0));z-index:2}.flower:nth-child(2){--offset:-30px}.flower:nth-child(3){--offset:8px}.stem{position:absolute;bottom:0;left:50%;height:122px;width:4px;border-radius:6px;background:#698a62;transform:translateX(-50%);z-index:-1}.stem:before,.stem:after{content:"";position:absolute;background:#79986f;border-radius:100% 0 100% 0;width:34px;height:20px;top:36px;left:1px;transform:rotate(-31deg)}.stem:after{left:-30px;top:67px;transform:rotate(115deg)}.flower button{width:110px;height:110px;position:absolute;top:4px;left:50%;transform:translateX(-50%);border:0;background:transparent;transition:filter .3s,transform .3s}.flower button:hover{transform:translateX(-50%) scale(1.08)}.petal{position:absolute;left:37px;top:6px;width:36px;height:60px;border-radius:50% 50% 36% 36%;background:var(--petal,#f0c4c4);transform-origin:50% 49px;transform:rotate(calc(var(--i) * 60deg));box-shadow:inset 2px 5px 13px #fff7,0 2px 5px #6c5c4a20;transition:transform .7s var(--ease)}.flower:not(.picked) .petal{transform:rotate(calc(var(--i) * 60deg)) scale(.87)}.flower.picked .petal{transform:rotate(calc(var(--i) * 60deg)) scale(1.06)}.flower:nth-child(2){--petal:#e8deb3}.flower:nth-child(3){--petal:#dbbdc8}.flower .center{position:absolute;top:41px;left:42px;width:27px;height:27px;border-radius:50%;background:radial-gradient(circle,#f1c986,#b68f58);box-shadow:0 0 0 2px #ac7a5345}.flower-number{position:absolute;bottom:12px;left:0;right:0;color:#56765a;font-size:10px;letter-spacing:.13em;text-transform:uppercase}.garden-note{position:relative;background:#fffcf2;border:1px solid #efe0d3;border-radius:17px;box-shadow:0 22px 58px #6a6e5630;max-width:610px;margin:24px auto 0;min-height:142px;display:flex;gap:18px;padding:19px;text-align:left;align-items:center;animation:floatIn .6s ease both}.garden-note img{height:102px;width:100px;object-fit:cover;border-radius:9px;box-shadow:0 7px 15px #0001}.garden-note .note-num{font-size:9px;letter-spacing:.2em;color:#917b7e;text-transform:uppercase}.garden-note p{font:500 clamp(1.45rem,4.5vw,2.15rem)/1.07 var(--serif);margin:9px 0 0;color:#536152}.garden-note.hidden,.garden-finale.hidden{display:none}.flower-finish{margin-top:25px;font-size:12px;color:#526953}.garden-finale{max-width:600px;margin:23px auto 0;padding:28px;border:1px solid #ecddca;background:#fbf4eab5;border-radius:22px;box-shadow:0 15px 55px #67775b20}.garden-finale h3{font:500 clamp(2rem,5.2vw,3.4rem)/.95 var(--serif);color:#4c574f;margin:7px 0 18px}.garden-video{max-width:290px;width:100%;max-height:52svh;background:#171719;border-radius:14px;box-shadow:0 15px 50px #0003;display:block;margin:20px auto 12px}.garden-finale small{display:block;font-size:11px;color:#657565}
+/* GRAN PORTICO */
+#portico{background:radial-gradient(circle at 50% -10%,#78665d 0,#4b3732 47%,#271e21 100%);color:#f8eddd}.portico-main{min-height:calc(100svh - 70px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,7vw,100px);align-items:center;max-width:1160px;margin:auto;padding:14px clamp(22px,5vw,65px) 80px}.portico-intro .overline{color:#dbbc98}.portico-intro .world-title{margin-bottom:21px}.portico-intro .world-sub{color:#e6cbb5}.arch{position:relative;max-width:350px;width:85%;height:270px;margin:38px auto 0;border:17px solid #baa38c;border-bottom:0;border-radius:46% 46% 0 0/58% 58% 0 0;box-shadow:0 0 0 10px #705d55,0 0 0 13px #b59a80,inset 0 18px 30px #110a0b90,0 20px 44px #0005;overflow:hidden;background:radial-gradient(circle at 50% 15%,#d2a886 0,#aa785f 48%,#503b39)}.arch:before,.arch:after{content:"";position:absolute;bottom:0;top:25%;width:50%;background:repeating-linear-gradient(0deg,transparent 0 48px,#3f292945 49px 51px),linear-gradient(100deg,#98715b,#674943);border:2px solid #bd9874;transition:transform 1.5s var(--ease);z-index:2}.arch:before{left:0;transform-origin:left}.arch:after{right:0;transform-origin:right}.arch.open:before{transform:perspective(300px) rotateY(-75deg)}.arch.open:after{transform:perspective(300px) rotateY(75deg)}.arch-heart{position:absolute;inset:0;display:grid;place-items:center;color:#f8e8c9;font:70px var(--serif);text-shadow:0 0 24px #f4cda5}.arch-caption{text-align:center;font-size:10px;letter-spacing:.21em;text-transform:uppercase;color:#e9d1b3;margin:25px auto 0}.quiz-box{width:min(100%,460px);min-height:475px;padding:clamp(24px,4vw,41px);border:1px solid #f3dbc158;background:#fff9ee0e;border-radius:24px;backdrop-filter:blur(8px);box-shadow:0 23px 80px #2217165a}.quiz-count{font-size:11px;letter-spacing:.14em;color:#eacbb0}.quiz-progress{display:flex;gap:5px;margin:19px 0 26px}.quiz-progress span{flex:1;height:3px;border-radius:6px;background:#f6ead326;transition:background .3s}.quiz-progress span.done{background:#e8c399}.quiz-question{font:500 clamp(1.95rem,4vw,2.65rem)/1.06 var(--serif);min-height:90px;margin-bottom:27px}.quiz-options{display:grid;gap:10px}.quiz-options button{background:#fff8ec12;border:1px solid #f4e3d34d;border-radius:13px;color:#f6eee8;padding:14px;min-height:51px;font-size:13px;text-align:left;transition:.2s}.quiz-options button:hover{background:#ffffff2d;border-color:#f8dfb9}.quiz-options button.wrong{background:#c0606065;border-color:#ffada7}.quiz-feedback{margin:16px 0 0;min-height:20px;font-size:12px;color:#edd1b5}.quiz-finish{display:none;text-align:center}.quiz-finish.show{display:block;animation:floatIn .6s both}.quiz-finish h3{font:500 clamp(2.7rem,5vw,4rem)/.95 var(--serif)}.quiz-finish p{font-size:12px;color:#e6ccb7}.movie-link{display:block;background:#fff7e21b;border:1px solid #ffffff55;padding:13px;border-radius:12px;text-decoration:none;font-size:13px;margin:10px auto}
+/* SIEMPRE */
+#siempre{background:radial-gradient(ellipse at 50% 0,#25364e 0,#111d2f 43%,#111522 100%);color:#f3e9db}.sky{position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:radial-gradient(1px 1px at 14% 19%,#f5ebd9 99%,transparent),radial-gradient(2px 2px at 72% 11%,#ffedce 99%,transparent),radial-gradient(1px 1px at 44% 36%,#fff8e2 99%,transparent),radial-gradient(2px 2px at 89% 56%,#fbe2c8 99%,transparent),radial-gradient(1px 1px at 20% 69%,#ffefe4 99%,transparent),radial-gradient(1px 1px at 64% 74%,#ffefe4 99%,transparent),radial-gradient(2px 2px at 35% 86%,#ffefe4 99%,transparent);background-size:100% 100%;opacity:.8}.journey-main{text-align:center;max-width:980px;padding:10px 20px 100px;margin:auto}.journey-main .world-title{margin-bottom:18px}.journey-main .world-sub{margin:0 auto;color:#dfdddf}.journey-meter{display:flex;max-width:450px;justify-content:space-between;margin:31px auto;align-items:center;gap:5px}.journey-meter:before{content:"";height:1px;position:absolute;width:min(350px,61vw);left:50%;transform:translateX(-50%);background:#e4d3af70;z-index:-1}.journey-meter span{width:37px;height:37px;border-radius:50%;border:1px solid #e4d3af68;background:#1c283a;color:#dcc6a2;display:grid;place-items:center;font:23px var(--serif)}.journey-meter span.done{color:#283343;background:#ebd9b5}.journey-panel{max-width:680px;margin:0 auto;border:1px solid #ebddc43c;border-radius:23px;background:#e6eff20c;box-shadow:0 19px 70px #01081980;backdrop-filter:blur(11px);padding:clamp(22px,5vw,37px);animation:floatIn .65s both}.journey-photos{display:flex;gap:13px;justify-content:center;align-items:center;margin:0 auto 26px}.polaroid{margin:0;flex:1;min-width:0;max-width:240px;background:#fbf5ed;padding:9px 9px 25px;box-shadow:0 9px 26px #0004;transform:rotate(-3deg)}.polaroid:nth-child(2){transform:rotate(3deg)}.polaroid img{height:clamp(155px,28vh,250px);width:100%;object-fit:cover;object-position:center}.journey-panel .overline{color:#d7bf9e}.journey-panel h3{font:500 clamp(2rem,5vw,3rem)/1.06 var(--serif);margin:0 auto 18px;max-width:550px}.journey-panel p{font-size:13px;line-height:1.75;color:#e3dce0;margin:0 auto 21px;max-width:500px}.journey-panel .pill{background:#efdfc3}
+/* ACCESSIBILITY, MOTION, RESPONSIVE */
+@keyframes floatIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}@keyframes worldIn{from{opacity:0;transform:scale(1.025)}to{opacity:1;transform:scale(1)}}@keyframes softZoom{from{transform:scale(1.02)}to{transform:scale(1.11)}}@keyframes twinkle{50%{opacity:.2;transform:scale(.7)}}
+@media(max-width:760px){.mirror-main,.portico-main{grid-template-columns:1fr;gap:23px;justify-items:center;text-align:center;padding:0 21px 70px}.mirror-copy,.portico-intro{max-width:480px}.mirror-copy .world-title,.portico-intro .world-title{font-size:clamp(4.6rem,16vw,6rem)}.mirror-copy .world-sub,.portico-intro .world-sub{margin:0 auto}.mirror-message{text-align:left}.mirror-frame{height:min(53svh,510px);min-height:295px;width:min(79vw,340px)}.portico-main{gap:23px}.portico-intro .world-sub{font-size:1.45rem}.arch{display:none}.quiz-box{min-height:0}.garden-main{padding-top:12px}.flower-field{margin-top:16px;height:225px}.flower{transform:translateY(var(--offset,0)) scale(.86);margin:0 -9px}.flower:nth-child(2){--offset:-15px}.garden-note{max-width:530px;margin-top:12px}.home-title{font-size:clamp(5.7rem,19vw,7rem)}.top-label{display:none}.journey-main{padding-top:0}.journey-panel{padding:22px 16px}}
+@media(max-width:420px){.home-title{font-size:5.2rem}.home-desc{max-width:275px}.home-top{align-items:flex-start}.world-top{padding:12px 16px;height:60px}.chapter{font-size:8px}.mirror-main{padding-top:5px}.mirror-frame{height:43svh;min-height:270px}.mirror-copy .world-title{font-size:4.6rem}.garden-main .world-title{font-size:5rem}.flower-field{height:207px}.flower{transform:translateY(var(--offset,0)) scale(.74);margin:0 -19px}.garden-note{gap:13px;padding:12px}.garden-note img{width:80px;height:88px}.quiz-box{padding:22px}.journey-main .world-title{font-size:5rem}.polaroid{padding:6px 6px 17px}.polaroid img{height:175px}.preview-switch{bottom:4px;right:4px;left:4px;justify-content:center}.preview-switch button{padding:7px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
 </head>
 <body>
-  <main>
-    <div class="photo-layer" role="img" aria-label="Nuestra foto de fondo"></div>
-    <div class="film" aria-hidden="true"></div>
-    <section class="opening" aria-label="Nuestros recuerdos">
-      <h1 class="title">nuestros<br />recuerdos</h1>
-      <form class="entry" id="keyword-form" autocomplete="off">
-        <label for="keyword" class="visually-hidden">escribir la palabra clave</label>
-        <div class="entry-wrap">
-          <input class="keyword" id="keyword" name="clave" type="text" placeholder="escribir la palabra clave" autocapitalize="none" autocomplete="off" spellcheck="false" enterkeyhint="go" aria-describedby="message" />
-          <button class="submit-key" type="submit" aria-label="abrir recuerdo">
-            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-        </div>
-        <p class="message" id="message" aria-live="polite"></p>
-      </form>
-    </section>
-    <footer class="footer">un lugar solo nuestro</footer>
-  </main>
-
-  <section class="memory" id="memory" role="dialog" aria-modal="true" aria-labelledby="memory-title" aria-hidden="true">
-    <button class="sound" id="sound" type="button" aria-label="silenciar música" title="activar o silenciar música">
-      <svg id="sound-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
-    </button>
-    <button class="close" id="close" type="button" aria-label="volver a la portada">×</button>
-    <div class="memory-inner">
-      <p class="eyebrow">un pedacito de nosotros</p>
-      <h2 class="memory-title" id="memory-title">espejo</h2>
-      <button class="flip-card" id="flip-card" type="button" aria-label="tocar para dar vuelta la foto y leer el mensaje" aria-pressed="false">
-        <div class="flip-inner">
-          <div class="flip-face flip-front"><img src="./recuerdo-espejo.jpg" alt="Nuestra foto juntos frente a un espejo" /></div>
-          <div class="flip-face flip-back" aria-hidden="true">
-            <p class="letter-text">
-              <span>aunque hoy nos toque estar lejos,</span>
-              <span>quiero que sientas que sigo cerquita tuyo.</span>
-              <span>hay recuerdos que no se rompen con la distancia.</span>
-              <span>y vos sos uno de los más lindos que tengo en mi vida.</span>
-              <span>te amo</span>
-            </p>
-          </div>
-        </div>
-      </button>
-      <p class="tap-hint" id="tap-hint">tocá la foto para descubrir algo más</p>
-    </div>
-  </section>
-
-
-  <!-- La siguiente carta no revela ninguna otra palabra ni cuántas faltan. -->
-  <section class="memory memory-story" id="memory-encontrarte" role="dialog" aria-modal="true" aria-labelledby="story-title" aria-hidden="true">
-    <button class="sound" id="story-sound" type="button" aria-label="silenciar música" title="activar o silenciar música">
-      <svg id="story-sound-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
-    </button>
-    <button class="close" id="story-close" type="button" aria-label="volver a la portada">×</button>
-    <div class="memory-inner">
-      <p class="eyebrow">un pedacito de nosotros</p>
-      <h2 class="memory-title" id="story-title">encontrarte</h2>
-
-      <div class="story-stage active" id="story-step-1">
-        <p class="story-counter">primer recuerdo</p>
-        <button class="flip-card story-card" id="story-card-1" type="button" aria-label="tap para descubrir" aria-pressed="false">
-          <div class="flip-inner">
-            <div class="flip-face flip-front"><img src="./encontrarte-1.jpg" alt="Nuestra foto juntos al aire libre, abrazados" /></div>
-            <div class="flip-face flip-back" aria-hidden="true"><span class="letter-text">solo quiero que sepas que voy a dar lo mejor de mí</span></div>
-          </div>
-        </button>
-        <p class="tap-hint" id="story-hint-1">tap para descubrir</p>
-      </div>
-
-      <div class="story-stage" id="story-step-2">
-        <p class="story-counter">otro pedacito de nosotros</p>
-        <button class="flip-card story-card" id="story-card-2" type="button" aria-label="tap para seguir" aria-pressed="false">
-          <div class="flip-inner">
-            <div class="flip-face flip-front"><img src="./encontrarte-2.jpg" alt="Nuestra foto juntos sentados, sonriendo" /></div>
-            <div class="flip-face flip-back" aria-hidden="true"><span class="letter-text">no me voy a rendir hasta encontrarte</span></div>
-          </div>
-        </button>
-        <p class="tap-hint" id="story-hint-2">tap para seguir</p>
-      </div>
-
-      <div class="story-stage" id="story-step-3">
-        <div class="finale-prelude" id="finale-prelude">
-          <span class="finale-symbol" aria-hidden="true">✦</span>
-          <p class="finale-prompt">hay algo más<br />para vos...</p>
-          <button class="finale-open" id="finale-open" type="button">tap para ver el final</button>
-        </div>
-        <div class="finale-video" id="finale-video">
-          <h3 class="finale-heading">quiero que lo sepas que lo voy a dar todo</h3>
-          <div class="video-shell"><video id="story-video" src="./encontrarte-final.mp4" poster="./encontrarte-poster.jpg" controls playsinline preload="metadata" aria-label="video final para vos"></video></div>
-          <p class="return-hint">este momento es para vos</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- Tercer recuerdo: pequeño juego sobre nuestra historia. -->
-  <section class="memory memory-quiz" id="memory-portico" role="dialog" aria-modal="true" aria-labelledby="quiz-main-title" aria-hidden="true">
-    <button class="close" id="quiz-close" type="button" aria-label="volver a la portada">×</button>
-    <div class="quiz-shell">
-      <p class="eyebrow">un juego solo nuestro</p>
-      <h2 class="quiz-heading" id="quiz-main-title">el gran pórtico</h2>
-      <div class="quiz-progress" id="quiz-progress" aria-label="progreso del juego"></div>
-      <div id="quiz-playing" style="width:100%">
-        <p class="quiz-level" id="quiz-level">nivel básico</p>
-        <h3 class="quiz-question" id="quiz-question">¿te acordás?</h3>
-        <div class="quiz-options" id="quiz-options"></div>
-        <p class="quiz-feedback" id="quiz-feedback" aria-live="polite"></p>
-      </div>
-      <div class="quiz-complete" id="quiz-complete">
-        <p class="quiz-prize">felicitaciones, mi amor.<br>ganaste una cita conmigo ♡</p>
-        <p class="return-hint">elegí una película y avisame por WhatsApp</p>
-        <nav class="movie-links" aria-label="elegir película">
-          <a href="https://wa.link/azms9d" target="_blank" rel="noopener noreferrer">La propuesta</a>
-          <a href="https://wa.link/5q4jrg" target="_blank" rel="noopener noreferrer">Amor a distancia</a>
-          <a href="https://wa.link/c0svom" target="_blank" rel="noopener noreferrer">Love, Rosie</a>
-        </nav>
-      </div>
-    </div>
-  </section>
-
-  <!-- Cuarta experiencia: tres fotos del espejo y dos fotos del auto. -->
-  <section class="memory memory-journey" id="memory-siempre" role="dialog" aria-modal="true" aria-labelledby="journey-title" aria-hidden="true">
-    <button class="close" id="journey-close" type="button" aria-label="volver a la portada">×</button>
-    <div class="journey-wrap">
-      <header class="journey-header">
-        <p class="journey-eyebrow">esto es para vos</p>
-        <h2 class="journey-title" id="journey-title">vos podés</h2>
-        <p class="journey-subtitle">a veces hace falta volver a mirar todo lo que ya pudiste hacer</p>
-      </header>
-      <div class="journey-stage show" id="journey-stage-1">
-        <figure class="journey-photo"><img src="./siempre-1.jpg" alt="Nosotros dos frente al espejo, compartiendo una sonrisa" loading="lazy"/><figcaption>un día de tantos</figcaption></figure>
-        <figure class="journey-photo"><img src="./siempre-2.jpg" alt="Nosotros dos en otra foto frente al mismo espejo" loading="lazy"/><figcaption>otro pedacito de ese día</figcaption></figure>
-        <button class="journey-card portrait" id="journey-card-1" type="button" aria-label="tocá la tercera foto para descubrir el mensaje" aria-pressed="false">
-          <span class="journey-card-inner">
-            <span class="journey-face journey-front"><img src="./siempre-3.jpg" alt="Estamos abrazados, ella apoya la cabeza sobre mi hombro" /></span>
-            <span class="journey-face journey-back" aria-hidden="true"><p>este es un recuerdo para que no te olvides de algo importante:<br><br>vos realmente podés con todo.<br><br>como en ese momento, que estabas bancando un montón y, aun así, seguiste.</p><small>siempre</small></span>
-          </span>
-        </button>
-        <p class="journey-tap" id="journey-hint-1">tocá la última foto para descubrir algo</p>
-        <div class="journey-arrow" aria-hidden="true">⌄</div>
-      </div>
-      <div class="journey-stage" id="journey-stage-2">
-        <figure class="journey-photo"><img src="./siempre-4.jpg" alt="En el auto durante nuestro viaje; ella descansa atrás" loading="lazy"/><figcaption>y después vino otro desafío</figcaption></figure>
-        <button class="journey-card landscape" id="journey-card-2" type="button" aria-label="tocá la última foto para leer nuestro recuerdo" aria-pressed="false">
-          <span class="journey-card-inner">
-            <span class="journey-face journey-front"><img src="./siempre-5.jpg" alt="En el auto, sonriendo durante el viaje" /></span>
-            <span class="journey-face journey-back" aria-hidden="true"><p>esto fue cuando cruzamos el país de un día para el otro para poder hacer la residencia.</p><small>y lo hicimos</small></span>
-          </span>
-        </button>
-        <p class="journey-tap" id="journey-hint-2">tocá la última foto para descubrir algo</p>
-      </div>
-      <div class="journey-stage" id="journey-stage-3">
-        <div class="journey-ending">
-          <span class="star" aria-hidden="true">✦</span>
-          <h3>vos siempre vas a ser capaz de hacer lo que quieras, siempre y cuando te lo propongas.</h3>
-          <p>que nunca se te olvide.</p>
-          <button class="journey-restart" id="journey-restart" type="button">volver a ver nuestras fotos</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <audio id="music" src="./musica-recuerdos.mp3" preload="none" loop playsinline></audio>
-  <audio id="story-music" src="./musica-encontrarte.mp3" preload="none" loop playsinline></audio>
-  <script>
-    const form = document.getElementById('keyword-form');
-    const input = document.getElementById('keyword');
-    const status = document.getElementById('message');
-    const overlays = {
-      espejo: document.getElementById('memory'),
-      encontrarte: document.getElementById('memory-encontrarte'),
-      'el gran portico': document.getElementById('memory-portico'),
-      siempre: document.getElementById('memory-siempre')
-    };
-    const tunes = {
-      espejo: document.getElementById('music'),
-      encontrarte: document.getElementById('story-music')
-    };
-    const soundButtons = {
-      espejo: document.getElementById('sound'),
-      encontrarte: document.getElementById('story-sound')
-    };
-    const soundIcons = {
-      espejo: document.getElementById('sound-icon'),
-      encontrarte: document.getElementById('story-sound-icon')
-    };
-    const speaker = '<path d="M11 5L6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>';
-    const mutedSpeaker = '<path d="M11 5L6 9H3v6h3l5 4V5Z"/><path d="m16 9 5 6M21 9l-5 6"/>';
-    let active = null;
-    const video = document.getElementById('story-video');
-
-    function normalizeWord(raw) {
-      return raw.trim().toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    }
-    function setSoundButton(key, muted) {
-      soundIcons[key].innerHTML = muted ? mutedSpeaker : speaker;
-      soundButtons[key].setAttribute('aria-label', muted ? 'activar música' : 'silenciar música');
-    }
-    function resetEspejo() {
-      const card = document.getElementById('flip-card');
-      card.classList.remove('flipped');
-      card.setAttribute('aria-pressed', 'false');
-      card.querySelector('.flip-back').setAttribute('aria-hidden','true');
-      document.getElementById('tap-hint').textContent = 'tocá la foto para descubrir algo más';
-    }
-    function resetEncontrarte() {
-      ['1','2'].forEach(n => {
-        const card = document.getElementById('story-card-' + n);
-        card.classList.remove('flipped');
-        card.setAttribute('aria-pressed', 'false');
-        card.querySelector('.flip-back').setAttribute('aria-hidden','true');
-        document.getElementById('story-hint-' + n).textContent = n === '1' ? 'tap para descubrir' : 'tap para seguir';
-        document.getElementById('story-hint-' + n).classList.remove('is-next');
-      });
-      document.querySelectorAll('.story-stage').forEach(s => s.classList.remove('active'));
-      document.getElementById('story-step-1').classList.add('active');
-      document.getElementById('finale-prelude').style.display = '';
-      document.getElementById('finale-video').classList.remove('visible');
-      video.pause();
-      video.currentTime = 0;
-    }
-    function startMusic(key) {
-      const tune = tunes[key];
-      tune.currentTime = 0;
-      tune.muted = false;
-      tune.volume = 0.15;
-      setSoundButton(key, false);
-      const p = tune.play();
-      if (p && typeof p.catch === 'function') {
-        p.catch(() => {
-          setSoundButton(key, true);
-          soundButtons[key].setAttribute('aria-label', 'tocar para escuchar música');
-        });
-      }
-    }
-    function openMemory(key) {
-      if (active) closeMemory(false);
-      active = key;
-      input.blur();
-      status.classList.remove('visible');
-      document.body.style.overflow = 'hidden';
-      if (key === 'espejo') resetEspejo();
-      else if (key === 'encontrarte') resetEncontrarte();
-      else if (key === 'el gran portico') resetQuiz();
-      else if (key === 'siempre') resetJourney();
-      overlays[key].classList.add('active');
-      overlays[key].setAttribute('aria-hidden', 'false');
-      if (tunes[key]) startMusic(key); // Solo las dos cartas con pistas locales.
-      const closeId = key === 'espejo' ? 'close' : key === 'encontrarte' ? 'story-close' : key === 'el gran portico' ? 'quiz-close' : 'journey-close';
-      document.getElementById(closeId).focus({ preventScroll:true });
-    }
-    function closeMemory(restoreFocus = true) {
-      if (!active) return;
-      const key = active;
-      overlays[key].classList.remove('active');
-      overlays[key].setAttribute('aria-hidden','true');
-      if (tunes[key]) {
-        tunes[key].pause();
-        tunes[key].currentTime = 0;
-      }
-      if (key === 'encontrarte') video.pause();
-      document.body.style.overflow = '';
-      active = null;
-      input.value = '';
-      if (restoreFocus) input.focus({preventScroll:true});
-    }
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const key = normalizeWord(input.value);
-      if (!key) return;
-      if (Object.prototype.hasOwnProperty.call(overlays,key)) openMemory(key);
-      else {
-        status.textContent = 'todavía no hay un recuerdo guardado con esa palabra';
-        status.classList.add('visible');
-      }
-    });
-    input.addEventListener('input', () => status.classList.remove('visible'));
-    document.getElementById('close').addEventListener('click', () => closeMemory());
-    document.getElementById('story-close').addEventListener('click', () => closeMemory());
-    document.getElementById('quiz-close').addEventListener('click', () => closeMemory());
-    document.getElementById('journey-close').addEventListener('click', () => closeMemory());
-    document.getElementById('flip-card').addEventListener('click', () => {
-      const card = document.getElementById('flip-card');
-      const flipped = card.classList.toggle('flipped');
-      card.setAttribute('aria-pressed', String(flipped));
-      card.querySelector('.flip-back').setAttribute('aria-hidden', String(!flipped));
-      document.getElementById('tap-hint').textContent = flipped ? 'tocá para volver a ver nuestra foto' : 'tocá la foto para descubrir algo más';
-    });
-    function showStoryStage(n) {
-      document.querySelectorAll('.story-stage').forEach(s => s.classList.remove('active'));
-      const next = document.getElementById('story-step-' + n);
-      next.classList.add('active');
-      if (n <= 2) document.getElementById('story-card-' + n).focus({preventScroll:true});
-      else document.getElementById('finale-open').focus({preventScroll:true});
-    }
-    function handleStoryCard(n) {
-      const card = document.getElementById('story-card-' + n);
-      if (!card.classList.contains('flipped')) {
-        card.classList.add('flipped');
-        card.setAttribute('aria-pressed','true');
-        card.querySelector('.flip-back').setAttribute('aria-hidden','false');
-        const hint = document.getElementById('story-hint-' + n);
-        hint.textContent = '(dale tap de nuevo)';
-        hint.classList.add('is-next');
-        card.setAttribute('aria-label','dale tap de nuevo para seguir');
-      } else showStoryStage(n + 1);
-    }
-    document.getElementById('story-card-1').addEventListener('click', () => handleStoryCard(1));
-    document.getElementById('story-card-2').addEventListener('click', () => handleStoryCard(2));
-    document.getElementById('finale-open').addEventListener('click', () => {
-      document.getElementById('finale-prelude').style.display = 'none';
-      document.getElementById('finale-video').classList.add('visible');
-      // El video tiene audio propio; la canción baja aún más para permitir escucharlo.
-      tunes.encontrarte.volume = 0.06;
-      video.currentTime = 0;
-      const p = video.play();
-      if (p && typeof p.catch === 'function') p.catch(() => { /* controles visibles para iniciar manualmente */ });
-    });
-    video.addEventListener('play', () => { if (active === 'encontrarte') tunes.encontrarte.volume = 0.06; });
-    video.addEventListener('pause', () => { if (active === 'encontrarte') tunes.encontrarte.volume = 0.15; });
-    video.addEventListener('ended', () => { if (active === 'encontrarte') tunes.encontrarte.volume = 0.15; });
-    Object.keys(soundButtons).forEach(key => {
-      soundButtons[key].addEventListener('click', () => {
-        if (active !== key) return;
-        const tune = tunes[key];
-        if (tune.paused) {
-          tune.muted = false;
-          const p = tune.play();
-          if (p && typeof p.then === 'function') p.then(() => setSoundButton(key,false)).catch(() => setSoundButton(key,true));
-        } else {
-          tune.muted = !tune.muted;
-          setSoundButton(key,tune.muted);
-        }
-      });
-    });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape' && active) closeMemory(); });
-
-    /* Juego del tercer sobre (las opciones de respuesta pueden reemplazarse sin alterar las otras cartas). */
-    const quizData = [
-      {level:'básico',question:'¿En qué departamento y piso vivíamos?',answers:['depto 10, piso 1','depto 12, piso 2','depto 1, piso 10'],correct:0},
-      {level:'básico',question:'¿Qué día fue nuestro primer beso?',answers:['12 de octubre de 2024','22 de octubre de 2024','22 de noviembre de 2024'],correct:1},
-      {level:'básico',question:'¿Qué palabra usábamos para hablar del snowboard?',answers:['ski','snow','surf'],correct:1},
-      {level:'simple',question:'¿En qué barrio vivía mamá?',answers:['500 viviendas','400 viviendas','300 viviendas'],correct:1},
-      {level:'simple',question:'¿En qué departamento estaba lo de la abuela?',answers:['Montevideo','Maldonado','Canelones'],correct:2},
-      {level:'simple',question:'¿Qué yerba tomábamos en Argentina?',answers:['Amanda','Canarias','Playadito'],correct:0},
-      {level:'pro',question:'¿Cuál es mi color favorito?',answers:['verde oscuro','azul marino','gris'],correct:1},
-      {level:'pro',question:'¿A qué lugar soñamos con viajar?',answers:['Hawái','Roma','París'],correct:0},
-      {level:'pro',question:'¿Cómo se llamaba aquel primer trabajo?',answers:['Picasso','Leonardo','Dalí'],correct:0}
-    ];
-    let quizIndex = 0;
-    function resetQuiz() {
-      quizIndex = 0;
-      document.getElementById('quiz-playing').style.display = '';
-      document.getElementById('quiz-complete').classList.remove('show');
-      renderQuiz();
-    }
-    function renderQuiz() {
-      const entry = quizData[quizIndex];
-      if (!entry) {
-        document.getElementById('quiz-playing').style.display = 'none';
-        document.getElementById('quiz-complete').classList.add('show');
-        document.getElementById('quiz-progress').innerHTML = quizData.map(() => '<span class="done"></span>').join('');
-        return;
-      }
-      document.getElementById('quiz-level').textContent = 'nivel ' + entry.level + ' · ' + (quizIndex+1) + ' de 9';
-      document.getElementById('quiz-question').textContent = entry.question;
-      document.getElementById('quiz-feedback').textContent = '';
-      document.getElementById('quiz-progress').innerHTML = quizData.map((_,i) => `<span class="${i<=quizIndex?'done':''}"></span>`).join('');
-      const container = document.getElementById('quiz-options');
-      container.replaceChildren();
-      entry.answers.forEach((a,i) => {
-        const b = document.createElement('button');
-        b.className = 'quiz-choice'; b.type = 'button'; b.textContent = a;
-        b.addEventListener('click', () => {
-          if (i !== entry.correct) {
-            document.getElementById('quiz-feedback').textContent = 'casi… probá otra vez ♡';
-            b.classList.remove('wrong'); void b.offsetWidth; b.classList.add('wrong');
-          } else {
-            quizIndex++; renderQuiz();
-          }
-        });
-        container.appendChild(b);
-      });
-    }
-    /* Dos tandas de fotos. La 3.ª y la 5.ª se dan vuelta y, al segundo tap, avanzan. */
-    const journeyOverlay = document.getElementById('memory-siempre');
-    function showJourneyStage(n) {
-      [1,2,3].forEach(k => document.getElementById('journey-stage-'+k).classList.toggle('show',n===k));
-      journeyOverlay.scrollTop = 0;
-    }
-    function resetJourney() {
-      for (const n of [1,2]) {
-        const el = document.getElementById('journey-card-'+n);
-        el.classList.remove('flipped');
-        el.setAttribute('aria-pressed','false');
-        el.querySelector('.journey-back').setAttribute('aria-hidden','true');
-        document.getElementById('journey-hint-'+n).textContent = 'tocá la última foto para descubrir algo';
-      }
-      showJourneyStage(1);
-    }
-    function handleJourneyCard(n) {
-      const el = document.getElementById('journey-card-'+n);
-      if (!el.classList.contains('flipped')) {
-        el.classList.add('flipped');
-        el.setAttribute('aria-pressed','true');
-        el.querySelector('.journey-back').setAttribute('aria-hidden','false');
-        document.getElementById('journey-hint-'+n).textContent = 'dale tap de nuevo para seguir';
-      } else {
-        showJourneyStage(n+1);
-      }
-    }
-    document.getElementById('journey-card-1').addEventListener('click', () => handleJourneyCard(1));
-    document.getElementById('journey-card-2').addEventListener('click', () => handleJourneyCard(2));
-    document.getElementById('journey-restart').addEventListener('click',resetJourney);
-
-  </script>
+<main id="home">
+  <div class="grain" aria-hidden="true"></div><span class="home-glimmer g1" aria-hidden="true">✦</span><span class="home-glimmer g2" aria-hidden="true">✧</span><span class="home-glimmer g3" aria-hidden="true">✦</span>
+  <div class="home-top"><div class="home-brand"><span class="brand-seal">m·f</span><span>para nosotros</span></div><span class="top-label">un rincón de nuestra historia</span></div>
+  <div class="home-center"><div class="home-mini">Mati &amp; Flor · 2024 — para siempre</div><h1 class="home-title">nuestros <em>recuerdos</em></h1><div class="home-rule"></div><p class="home-desc">Hay cosas que no se olvidan.<br>Se vuelven a vivir.</p>
+    <form class="key-form" id="key-form"><label for="secret" style="position:absolute;clip:rect(0,0,0,0)">Palabra secreta</label><input id="secret" type="text" placeholder="escribí nuestra palabra secreta…" autocomplete="off" spellcheck="false" maxlength="50"><button aria-label="abrir recuerdo" type="submit">↗</button></form><p class="key-error" id="key-error" role="status">todavía no guardamos un recuerdo con esa palabra ♡</p><p class="hint" style="margin:7px 0 0">una palabra puede abrir un mundo</p>
+  </div><div class="home-bottom"><span>hecho con amor</span><span>✧</span><span>para flor</span></div>
+</main>
+<!-- ESPEJO -->
+<section class="world" id="espejo" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="espejo-heading">
+  <div class="world-top"><button class="back" data-close><span class="arr">←</span> volver</button><span class="chapter">capítulo i · espejo</span><button class="sound" data-sound="recuerdos" title="Activar o silenciar música" aria-label="Activar o silenciar música">♫</button></div>
+  <div class="mirror-main"><div class="mirror-copy"><p class="overline">lo que la distancia no borra</p><h2 class="world-title" id="espejo-heading">lo que<br><span class="handwritten">refleja</span><br>el amor</h2><p class="world-sub">Hay recuerdos que viven en nosotros, incluso cuando estamos lejos.</p><p class="hint">Deslizá el dedo por el espejo para descubrir nuestra foto.</p><button type="button" class="ghost mirror-action" id="mirror-reveal">revelar nuestro recuerdo ↗</button><div class="mirror-message" id="mirror-message"><p>“Aunque hoy nos toque estar lejos, quiero que sientas que sigo cerquita tuyo. Hay recuerdos que no se rompen con la distancia, y vos sos uno de los más lindos que tengo en mi vida.”</p><strong>Te amo ♡</strong></div></div>
+  <div class="mirror-frame"><div class="mirror-glass"><img src="./recuerdo-espejo.jpg" alt="Nuestra fotografía frente al espejo"><canvas id="fog-canvas" aria-label="Espejo empañado: deslizá para descubrir la imagen"></canvas><div class="mirror-sheen"></div></div></div></div>
+</section>
+<!-- ENCONTRARTE -->
+<section class="world" id="encontrarte" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="encontrarte-heading">
+  <div class="world-top"><button class="back" data-close><span class="arr">←</span> volver</button><span class="chapter">capítulo ii · encontrarte</span><button class="sound" data-sound="encontrarte" title="Activar o silenciar música" aria-label="Activar o silenciar música">♫</button></div>
+  <div class="garden-main"><p class="overline">hay amores que florecen</p><h2 class="world-title" id="encontrarte-heading">un jardín<br><span class="handwritten">para vos</span></h2><p class="world-sub">Cada flor guarda algo que quiero decirte. Tocá las tres para descubrirlo.</p>
+  <div class="flower-field" id="flower-field"><div class="flower" data-flower="0"><span class="stem"></span><button type="button" aria-label="Abrir flor 1"></button><span class="flower-number">i · promesa</span></div><div class="flower" data-flower="1"><span class="stem"></span><button type="button" aria-label="Abrir flor 2"></button><span class="flower-number">ii · esperanza</span></div><div class="flower" data-flower="2"><span class="stem"></span><button type="button" aria-label="Abrir flor 3"></button><span class="flower-number">iii · para vos</span></div></div>
+  <div class="garden-note hidden" id="garden-note" aria-live="polite"><img id="note-img" alt="Foto de Mati y Flor" src="./encontrarte-1.jpg"><div><span class="note-num" id="note-number">primera flor</span><p id="note-text"></p></div></div><div class="flower-finish" id="flower-finish">descubriste <b id="flower-count">0</b> de 3 flores</div>
+  <div class="garden-finale hidden" id="garden-finale"><span class="overline">una última cosa</span><h3>quiero decirte esto <span class="handwritten">mirándote a los ojos.</span></h3><button class="pill" id="show-video" type="button">ver mi mensaje para vos ♡</button><video class="garden-video" id="final-video" poster="./encontrarte-poster.jpg" src="./encontrarte-final.mp4" controls playsinline preload="metadata" style="display:none"></video><small id="video-note" style="display:none">para vos, con todo mi amor</small></div>
+  </div>
+</section>
+<!-- PORTICO -->
+<section class="world" id="portico" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="portico-heading"><div class="world-top"><button class="back" data-close><span class="arr">←</span> volver</button><span class="chapter">capítulo iii · el gran pórtico</span><span style="width:34px"></span></div>
+<div class="portico-main"><div class="portico-intro"><p class="overline">nueve preguntas, una sorpresa</p><h2 class="world-title" id="portico-heading">el gran<br><span class="handwritten">pórtico</span></h2><p class="world-sub">Hay puertas que solo se abren con recuerdos compartidos. ¿Te acordás de nuestra historia?</p><div class="arch" id="arch"><span class="arch-heart">♡</span></div><p class="arch-caption" id="arch-caption">cada respuesta abre un poquito más la puerta</p></div>
+<div class="quiz-box"><div id="quiz-active"><span class="quiz-count" id="quiz-count">pregunta 01 de 09</span><div class="quiz-progress" id="quiz-progress"></div><h3 class="quiz-question" id="quiz-question"></h3><div class="quiz-options" id="quiz-options"></div><p class="quiz-feedback" id="quiz-feedback" role="status"></p></div><div class="quiz-finish" id="quiz-finish"><p class="overline">abriste la puerta ♡</p><h3>felicitaciones, mi amor.<br>ganaste una cita conmigo.</h3><p>Elegí una película y avisame por WhatsApp:</p><a class="movie-link" href="https://wa.link/azms9d" target="_blank" rel="noopener">La propuesta ↗</a><a class="movie-link" href="https://wa.link/5q4jrg" target="_blank" rel="noopener">Amor a distancia ↗</a><a class="movie-link" href="https://wa.link/c0svom" target="_blank" rel="noopener">Love, Rosie ↗</a></div></div></div></section>
+<!-- SIEMPRE -->
+<section class="world" id="siempre" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="siempre-heading"><div class="sky"></div><div class="world-top"><button class="back" data-close><span class="arr">←</span> volver</button><span class="chapter">capítulo iv · siempre</span><span style="width:34px"></span></div>
+<div class="journey-main"><p class="overline">todas las estrellas que ya alcanzaste</p><h2 class="world-title" id="siempre-heading">vos <span class="handwritten">podés</span></h2><p class="world-sub">A veces hace falta volver a mirar todo lo que ya pudiste hacer.</p><div class="journey-meter" id="journey-meter"><span>✦</span><span>✦</span><span>✦</span></div><div class="journey-panel" id="journey-panel" aria-live="polite"></div></div></section>
+<div class="preview-switch" id="preview-switch"><span>VISTA PREVIA</span><button data-preview="espejo">Espejo</button><button data-preview="encontrarte">Encontrarte</button><button data-preview="portico">El pórtico</button><button data-preview="siempre">Siempre</button></div>
+<audio id="audio-recuerdos" src="./musica-recuerdos.mp3" loop preload="none"></audio><audio id="audio-encontrarte" src="./musica-encontrarte.mp3" loop preload="none"></audio>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const worlds={espejo:$('espejo'),encontrarte:$('encontrarte'),portico:$('portico'),siempre:$('siempre')};
+let active=null;let previousFocus=null;const audio={recuerdos:$('audio-recuerdos'),encontrarte:$('audio-encontrarte')};let playingAudio=null;
+const normalize=s=>s.trim().toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
+function openWorld(key){if(!worlds[key])return;if(active)closeWorld(false);previousFocus=document.activeElement;active=key;worlds[key].classList.add('active');worlds[key].setAttribute('aria-hidden','false');document.body.style.overflow='hidden';worlds[key].scrollTop=0; if(key==='espejo')setupMirror(); if(key==='encontrarte')resetFlowers(); if(key==='portico')resetQuiz();if(key==='siempre')renderJourney(0);const back=worlds[key].querySelector('[data-close]');if(back)back.focus({preventScroll:true});}
+function closeWorld(restore=true){if(!active)return;worlds[active].classList.remove('active');worlds[active].setAttribute('aria-hidden','true');if(active==='encontrarte'){$('final-video').pause();}Object.values(audio).forEach(a=>{a.pause();a.currentTime=0});playingAudio=null;document.querySelectorAll('.sound').forEach(b=>b.textContent='♫');active=null;document.body.style.overflow='';$('secret').value='';if(restore)(previousFocus||$('secret')).focus({preventScroll:true});}
+$('key-form').addEventListener('submit',e=>{e.preventDefault();const word=normalize($('secret').value);const key=word==='el gran portico'?'portico':word;if(worlds[key]){openWorld(key);$('key-error').classList.remove('show');}else{$('key-error').classList.add('show');}});
+$('secret').addEventListener('input',()=>$('key-error').classList.remove('show'));
+document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeWorld()));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&active)closeWorld();});
+for(const btn of document.querySelectorAll('[data-sound]'))btn.addEventListener('click',async()=>{const key=btn.dataset.sound;const track=audio[key];if(!track)return;if(playingAudio===key&&!track.paused){track.pause();playingAudio=null;btn.textContent='♫';return;}Object.values(audio).forEach(x=>x.pause());track.volume=key==='encontrarte'?.10:.16;try{await track.play();playingAudio=key;document.querySelectorAll('[data-sound]').forEach(x=>x.textContent='♫');btn.textContent='♪';}catch(e){btn.title='Usá este botón para iniciar la música';}});
+const isDemo=new URLSearchParams(location.search).has('demo');if(isDemo){$('preview-switch').classList.add('show');document.querySelectorAll('[data-preview]').forEach(b=>b.addEventListener('click',()=>openWorld(b.dataset.preview)));}
+/* ESPEJO: borrar el vapor para descubrir una foto real */
+let mirrorLength=0,mirrorCtx=null,lastPoint=null;const fog=$('fog-canvas');
+function setupMirror(){const glass=fog.parentElement;const w=glass.clientWidth,h=glass.clientHeight,dpr=Math.min(devicePixelRatio||1,2);fog.width=Math.round(w*dpr);fog.height=Math.round(h*dpr);mirrorCtx=fog.getContext('2d');mirrorCtx.setTransform(dpr,0,0,dpr,0,0);const grad=mirrorCtx.createLinearGradient(0,0,w,h);grad.addColorStop(0,'rgba(222,220,215,.97)');grad.addColorStop(.5,'rgba(174,181,184,.96)');grad.addColorStop(1,'rgba(212,208,198,.94)');mirrorCtx.fillStyle=grad;mirrorCtx.fillRect(0,0,w,h);mirrorCtx.fillStyle='rgba(250,245,231,.68)';mirrorCtx.font='italic 27px Georgia';mirrorCtx.textAlign='center';mirrorCtx.fillText('un recuerdo para vos',w/2,h/2);mirrorLength=0;lastPoint=null;$('mirror-message').classList.remove('shown');$('mirror-reveal').textContent='revelar nuestro recuerdo ↗';fog.style.opacity='1';fog.style.pointerEvents='auto';}
+function mirrorPoint(e){const r=fog.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
+function eraseMirror(p,previous){if(!mirrorCtx)return;mirrorCtx.globalCompositeOperation='destination-out';mirrorCtx.strokeStyle='rgba(0,0,0,1)';mirrorCtx.fillStyle='rgba(0,0,0,1)';mirrorCtx.lineWidth=55;mirrorCtx.lineCap='round';if(previous){mirrorCtx.beginPath();mirrorCtx.moveTo(previous.x,previous.y);mirrorCtx.lineTo(p.x,p.y);mirrorCtx.stroke();mirrorLength+=Math.hypot(p.x-previous.x,p.y-previous.y);}else{mirrorCtx.beginPath();mirrorCtx.arc(p.x,p.y,27,0,2*Math.PI);mirrorCtx.fill();mirrorLength+=18;}mirrorCtx.globalCompositeOperation='source-over';if(mirrorLength>450)revealMirror();}
+function revealMirror(){fog.style.transition='opacity 1.2s';fog.style.opacity='0';fog.style.pointerEvents='none';$('mirror-message').classList.add('shown');$('mirror-reveal').textContent='nuestro recuerdo ♡';}
+fog.addEventListener('pointerdown',e=>{e.preventDefault();fog.setPointerCapture(e.pointerId);lastPoint=mirrorPoint(e);eraseMirror(lastPoint,null);});
+fog.addEventListener('pointermove',e=>{if(!fog.hasPointerCapture(e.pointerId))return;e.preventDefault();const p=mirrorPoint(e);eraseMirror(p,lastPoint);lastPoint=p;});fog.addEventListener('pointerup',()=>lastPoint=null);fog.addEventListener('pointercancel',()=>lastPoint=null);$('mirror-reveal').addEventListener('click',revealMirror);
+/* JARDIN: tres flores, tres mensajes, video final */
+const flowerMessages=[{label:'primera flor · una promesa',message:'Solo quiero que sepas que voy a dar lo mejor de mí.',image:'encontrarte-1.jpg'},{label:'segunda flor · una certeza',message:'No me voy a rendir hasta encontrarte.',image:'encontrarte-2.jpg'},{label:'tercera flor · lo que sigue',message:'Y hay algo que quiero decirte yo, mirándote a los ojos.',image:'encontrarte-poster.jpg'}];let flowersFound=new Set();
+for(const flower of document.querySelectorAll('.flower')){const btn=flower.querySelector('button');for(let i=0;i<6;i++){const petal=document.createElement('span');petal.className='petal';petal.style.setProperty('--i',i);btn.append(petal);}const center=document.createElement('span');center.className='center';btn.append(center);btn.addEventListener('click',()=>{const i=Number(flower.dataset.flower);flowersFound.add(i);flower.classList.add('picked');const m=flowerMessages[i];$('note-number').textContent=m.label;$('note-text').textContent=m.message;$('note-img').src='./'+m.image;$('garden-note').classList.remove('hidden');$('flower-count').textContent=flowersFound.size;btn.setAttribute('aria-pressed','true');if(flowersFound.size===3){$('garden-finale').classList.remove('hidden');$('flower-finish').textContent='las tres flores ya tienen tu nombre ♡';}});}
+function resetFlowers(){flowersFound.clear();document.querySelectorAll('.flower').forEach(f=>{f.classList.remove('picked');f.querySelector('button').setAttribute('aria-pressed','false')});$('garden-note').classList.add('hidden');$('garden-finale').classList.add('hidden');$('flower-count').textContent='0';$('flower-finish').innerHTML='descubriste <b id="flower-count">0</b> de 3 flores';$('final-video').pause();$('final-video').style.display='none';$('show-video').style.display='inline-block';$('video-note').style.display='none';}
+$('show-video').addEventListener('click',()=>{$('show-video').style.display='none';$('final-video').style.display='block';$('video-note').style.display='block';if(audio.encontrarte&&!audio.encontrarte.paused)audio.encontrarte.volume=.03;$('final-video').play().catch(()=>{});});
+$('final-video').addEventListener('play',()=>{if(!audio.encontrarte.paused)audio.encontrarte.volume=.03;});$('final-video').addEventListener('pause',()=>{if(!audio.encontrarte.paused)audio.encontrarte.volume=.10;});
+/* PORTICO: se conservan las preguntas y opciones originales */
+const quizData=[{level:'básico',question:'¿En qué departamento y piso vivíamos?',answers:['depto 10, piso 1','depto 12, piso 2','depto 1, piso 10'],correct:0},{level:'básico',question:'¿Qué día fue nuestro primer beso?',answers:['12 de octubre de 2024','22 de octubre de 2024','22 de noviembre de 2024'],correct:1},{level:'básico',question:'¿Qué palabra usábamos para hablar del snowboard?',answers:['ski','snow','surf'],correct:1},{level:'simple',question:'¿En qué barrio vivía mamá?',answers:['500 viviendas','400 viviendas','300 viviendas'],correct:1},{level:'simple',question:'¿En qué departamento estaba lo de la abuela?',answers:['Montevideo','Maldonado','Canelones'],correct:2},{level:'simple',question:'¿Qué yerba tomábamos en Argentina?',answers:['Amanda','Canarias','Playadito'],correct:0},{level:'pro',question:'¿Cuál es mi color favorito?',answers:['verde oscuro','azul marino','gris'],correct:1},{level:'pro',question:'¿A qué lugar soñamos con viajar?',answers:['Hawái','Roma','París'],correct:0},{level:'pro',question:'¿Cómo se llamaba aquel primer trabajo?',answers:['Picasso','Leonardo','Dalí'],correct:0}];let quizIndex=0;
+function resetQuiz(){quizIndex=0;$('quiz-active').style.display='';$('quiz-finish').classList.remove('show');$('arch').classList.remove('open');$('arch-caption').textContent='cada respuesta abre un poquito más la puerta';renderQuiz();}
+function renderQuiz(){const q=quizData[quizIndex];if(!q){$('quiz-active').style.display='none';$('quiz-finish').classList.add('show');$('arch').classList.add('open');$('arch-caption').textContent='ya tenés la llave de nuestra historia ♡';return;}$('quiz-count').textContent='nivel '+q.level+' · pregunta '+String(quizIndex+1).padStart(2,'0')+' de 09';$('quiz-question').textContent=q.question;$('quiz-feedback').textContent='';$('quiz-progress').replaceChildren(...quizData.map((_,i)=>{const s=document.createElement('span');if(i<=quizIndex)s.className='done';return s;}));const options=$('quiz-options');options.replaceChildren();q.answers.forEach((answer,i)=>{const b=document.createElement('button');b.textContent=answer;b.type='button';b.addEventListener('click',()=>{if(i!==q.correct){$('quiz-feedback').textContent='casi... probá otra vez ♡';b.classList.add('wrong');setTimeout(()=>b.classList.remove('wrong'),450);return;}quizIndex++;renderQuiz();});options.append(b);});}
+/* SIEMPRE: todas las fotos y mensajes de apoyo originales */
+const journeyStages=[{label:'constelación i · lo que ya superaste',title:'Mirá todo lo que fuiste capaz de atravesar.',desc:'Este es un recuerdo para que no te olvides de algo importante: vos realmente podés con todo. Como en ese momento, que estabas bancando un montón y, aun así, seguiste.',images:['siempre-1.jpg','siempre-2.jpg','siempre-3.jpg'],button:'seguir nuestro camino →'},{label:'constelación ii · nuevos comienzos',title:'Y después vino otro desafío.',desc:'Esto fue cuando cruzamos el país de un día para el otro para poder hacer la residencia. Y lo hicimos.',images:['siempre-4.jpg','siempre-5.jpg'],button:'una última estrella →'},{label:'constelación iii · para que no lo olvides',title:'Vos siempre vas a ser capaz de hacer lo que quieras, siempre y cuando te lo propongas.',desc:'Que nunca se te olvide. Yo estoy para acompañarte.',images:['siempre-3.jpg'],button:'volver a ver nuestros recuerdos ↺'}];let journeyIndex=0;
+function renderJourney(i){journeyIndex=i;const s=journeyStages[i],panel=$('journey-panel');panel.replaceChildren();const photos=document.createElement('div');photos.className='journey-photos';s.images.forEach(name=>{const figure=document.createElement('figure');figure.className='polaroid';const img=document.createElement('img');img.src='./'+name;img.alt='Una foto nuestra, parte de este recuerdo';img.loading='lazy';figure.append(img);photos.append(figure);});const over=document.createElement('div');over.className='overline';over.textContent=s.label;const title=document.createElement('h3');title.textContent=s.title;const desc=document.createElement('p');desc.textContent=s.desc;const next=document.createElement('button');next.className='pill';next.textContent=s.button;next.addEventListener('click',()=>{renderJourney((journeyIndex+1)%journeyStages.length);worlds.siempre.scrollTo({top:0,behavior:'smooth'});});panel.append(photos,over,title,desc,next);$('journey-meter').querySelectorAll('span').forEach((x,j)=>x.classList.toggle('done',j<=i));}
+</script>
 </body>
 </html>
