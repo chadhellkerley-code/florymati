@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#211d1b" />
+  <meta name="description" content="Un lugar para guardar nuestros recuerdos." />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>nuestros recuerdos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { color-scheme: dark; --paper:#fff9f4; --ink:#3e302f; --white:#fff9f4; --soft:#eacdc3; }
+    *, *::before, *::after { box-sizing:border-box; }
+    html, body { margin:0; min-height:100%; }
+    body { font-family:"DM Sans",system-ui,sans-serif; color:var(--white); background:#211d1b; }
+    button, input { font:inherit; }
+    button { cursor:pointer; }
+    main { position:relative; min-height:100svh; display:grid; place-items:center; overflow:hidden; isolation:isolate; }
+    .photo-layer { position:absolute; inset:0; z-index:-3; background:#352d2b; }
+    .photo-layer::before { content:""; position:absolute; inset:-2%; background:url('./foto-nuestra.jpg') center center / cover no-repeat; animation:photo-in 2.7s ease-out both; }
+    .photo-layer::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(16,12,12,.27),rgba(13,12,12,.41) 44%,rgba(13,10,10,.62)); }
+    .film { position:absolute; inset:0; z-index:-1; opacity:.24; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.76' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.22' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    .opening { width:min(91vw,720px); display:grid; justify-items:center; text-align:center; transform:translateY(6px); }
+    .title { margin:0; font-family:"Cormorant Garamond",Georgia,serif; font-size:clamp(3.6rem,10vw,7.1rem); font-weight:500; line-height:.98; letter-spacing:-.045em; text-wrap:balance; text-shadow:0 3px 28px rgba(0,0,0,.25); opacity:0; transform:translateY(26px); animation:title-enter 1.25s .48s cubic-bezier(.22,1,.36,1) forwards,title-rise 1.35s 2.2s cubic-bezier(.22,1,.36,1) forwards; }
+    .entry { width:min(100%,390px); opacity:0; transform:translateY(26px); margin-top:30px; animation:input-enter 1.05s 2.75s cubic-bezier(.22,1,.36,1) forwards; }
+    .entry-wrap { position:relative; }
+    .keyword { display:block; width:100%; min-height:60px; padding:18px 62px 18px 23px; border-radius:22px; outline:none; font:400 15px/1.45 "DM Sans",system-ui,sans-serif; color:var(--white); background:rgba(255,255,255,.135); border:1px solid rgba(255,255,255,.42); text-align:center; letter-spacing:.012em; box-shadow:0 12px 34px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.08); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); transition:border-color .25s,background .25s,box-shadow .25s; }
+    .keyword::placeholder { color:rgba(255,250,244,.87); opacity:1; }
+    .keyword:focus { background:rgba(255,255,255,.2); border-color:rgba(255,255,255,.86); box-shadow:0 0 0 4px rgba(255,255,255,.11),0 18px 36px rgba(0,0,0,.18); }
+    .submit-key { position:absolute; right:7px; top:7px; width:46px; height:46px; border:none; border-radius:16px; background:rgba(255,249,244,.9); color:#4e3734; display:grid; place-items:center; transition:transform .2s,background .2s; }
+    .submit-key:hover { background:white; transform:translateX(2px); }
+    .submit-key:focus-visible, .close:focus-visible, .sound:focus-visible, .flip-card:focus-visible { outline:3px solid #f7c8b9; outline-offset:3px; }
+    .submit-key svg { width:20px; height:20px; }
+    .message { min-height:18px; margin:12px 0 0; font-size:12px; color:#fff2ec; opacity:0; transition:opacity .3s; }
+    .message.visible { opacity:1; }
+    .footer { position:absolute; bottom:max(20px,env(safe-area-inset-bottom)); left:0; width:100%; text-align:center; font-size:11px; letter-spacing:.18em; color:rgba(255,255,255,.68); opacity:0; animation:soft-enter 1s 3.8s ease forwards; }
+    /* Recuadro secreto: aparece solamente después de acertar la palabra. */
+    .memory { position:fixed; inset:0; z-index:10; display:grid; place-items:center; padding:calc(26px + env(safe-area-inset-top)) 15px calc(22px + env(safe-area-inset-bottom)); background:radial-gradient(ellipse at 48% 0%,#55403f 0%,#2d2425 50%,#1a1719 100%); opacity:0; visibility:hidden; pointer-events:none; transform:scale(1.015); transition:opacity .9s ease,transform .9s ease,visibility 0s .9s; overflow-y:auto; }
+    .memory.active { opacity:1; visibility:visible; pointer-events:auto; transform:scale(1); transition:opacity .9s ease,transform .9s ease,visibility 0s; }
+    .memory-inner { width:min(100%,380px); display:flex; flex-direction:column; align-items:center; gap:15px; margin:auto; }
+    .eyebrow { margin:0; font-size:10px; font-weight:500; letter-spacing:.25em; color:#e5c7be; text-align:center; text-transform:lowercase; }
+    .memory-title { margin:0 0 2px; font-family:"Cormorant Garamond",Georgia,serif; font-size:clamp(2.3rem,8vw,3.3rem); font-weight:500; letter-spacing:-.03em; line-height:1; }
+    .flip-card { width:min(82vw,340px); height:min(60svh,490px); min-height:340px; position:relative; padding:0; background:transparent; border:0; color:inherit; perspective:1200px; -webkit-tap-highlight-color:transparent; }
+    .flip-inner { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform 1.15s cubic-bezier(.2,.8,.15,1); }
+    .flip-card.flipped .flip-inner { transform:rotateY(180deg); }
+    .flip-face { position:absolute; inset:0; overflow:hidden; border-radius:14px; backface-visibility:hidden; -webkit-backface-visibility:hidden; box-shadow:0 24px 55px rgba(0,0,0,.35); }
+    .flip-front { display:grid; place-items:center; background:#302626; }
+    .flip-front img { display:block; width:100%; height:100%; object-fit:contain; }
+    .flip-back { display:flex; flex-direction:column; justify-content:center; align-items:center; padding:clamp(21px,7vw,38px); text-align:center; background:linear-gradient(145deg,#fffaf5 0%,#f4e7df 100%); color:var(--ink); transform:rotateY(180deg); }
+    .flip-back::before, .flip-back::after { content:"✦"; position:absolute; color:#a8766e; font-size:14px; }
+    .flip-back::before { top:24px; }
+    .flip-back::after { bottom:24px; }
+    .letter-text { margin:0; font-family:"Cormorant Garamond",Georgia,serif; font-size:clamp(1.35rem,4.9vw,1.86rem); line-height:1.25; font-weight:500; letter-spacing:-.016em; }
+    .letter-text span { display:block; margin-bottom:12px; }
+    .letter-text span:last-child { margin-top:20px; margin-bottom:0; font-size:clamp(1.65rem,6vw,2.2rem); font-style:italic; }
+    .tap-hint { min-height:20px; margin:0; font-size:12px; font-weight:400; letter-spacing:.05em; text-align:center; color:#f1d7cd; opacity:0; transform:translateY(7px); transition:opacity 1s ease,transform 1s ease; }
+    .memory.active .tap-hint { opacity:1; transform:translateY(0); transition-delay:1.1s; }
+    .close, .sound { position:absolute; z-index:11; top:max(16px,env(safe-area-inset-top)); width:39px; height:39px; border:1px solid rgba(255,255,255,.21); border-radius:50%; display:grid; place-items:center; color:#fff4ef; background:rgba(255,255,255,.08); }
+    .close { right:17px; font-size:24px; line-height:1; }
+    .sound { left:17px; }
+    .sound svg { width:17px; height:17px; }
+    .visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    @keyframes photo-in { from { opacity:.2; transform:scale(1.045); } to { opacity:1; transform:scale(1); } }
+    @keyframes title-enter { to { opacity:1; transform:translateY(0); } }
+    @keyframes title-rise { to { opacity:1; transform:translateY(-65px); } }
+    @keyframes input-enter { to { opacity:1; transform:translateY(-33px); } }
+    @keyframes soft-enter { to { opacity:1; } }
+    @media (max-width:560px) {
+      .opening { width:min(91vw,400px); }
+      .title { font-size:clamp(3.5rem,15vw,5.3rem); line-height:.9; }
+      .entry { width:min(100%,335px); margin-top:27px; }
+      .keyword { border-radius:19px; padding-left:18px; }
+      .flip-card { width:min(83vw,330px); height:min(62svh,493px); }
+    }
+    @media (max-height:700px) {
+      .memory-inner { gap:9px; }
+      .flip-card { height:55svh; min-height:295px; }
+      .letter-text { font-size:clamp(1.17rem,3.7vh,1.65rem); }
+      .letter-text span { margin-bottom:7px; }
+      .letter-text span:last-child { margin-top:12px; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      *,*::before,*::after { animation-duration:.01ms !important; animation-delay:.01ms !important; transition-duration:.01ms !important; transition-delay:0ms !important; }
+      .title { opacity:1; transform:translateY(-65px); }
+      .entry { opacity:1; transform:translateY(-33px); }
+      .footer { opacity:1; }
+      .memory.active .tap-hint { opacity:1; transform:none; }
+    }
+
+    /* Segundo recuerdo: dos fotografías que se dan vuelta, y un video final. */
+    .memory-story { background:radial-gradient(ellipse at 45% -10%,#604647 0%,#322728 45%,#1a1719 100%); }
+    .memory-story .memory-inner { width:min(100%,540px); gap:12px; }
+    .story-stage { display:none; width:100%; flex-direction:column; align-items:center; gap:15px; }
+    .story-stage.active { display:flex; animation:story-appear .68s cubic-bezier(.2,.7,.3,1) both; }
+    .memory-story .memory-title { font-size:clamp(2.4rem,8vw,3.4rem); margin:0 0 5px; }
+    .story-card { width:min(91vw,500px); height:min(56svh,360px); min-height:240px; }
+    .story-card .flip-front { background:#252223; }
+    .story-card .flip-front img { object-fit:contain; }
+    .story-card .flip-back { padding:clamp(20px,6vw,44px); }
+    .story-card .letter-text { font-size:clamp(1.8rem,6vw,2.55rem); line-height:1.2; }
+    .story-card .flip-back::before { top:18px; }
+    .story-card .flip-back::after { bottom:18px; }
+    .memory-story .tap-hint { min-height:24px; font-size:13px; opacity:1; transform:translateY(0); color:#f7e0d7; margin:5px 0; }
+    .memory-story .tap-hint.is-next { font-style:italic; }
+    .story-counter { margin:0; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:#dec5bb; }
+    .finale-prelude { display:flex; flex-direction:column; align-items:center; gap:22px; text-align:center; min-height:45svh; justify-content:center; }
+    .finale-symbol { color:#edcdbf; font-size:33px; font-family:Georgia,serif; opacity:.9; }
+    .finale-prompt { font-family:"Cormorant Garamond",Georgia,serif; font-size:clamp(2.6rem,10vw,4.6rem); line-height:.95; font-weight:500; margin:0; }
+    .finale-open { border:1px solid rgba(255,255,255,.55); border-radius:100px; color:#fff8f4; background:rgba(255,255,255,.1); min-height:53px; padding:12px 25px; font-size:13px; font-weight:500; letter-spacing:.02em; transition:background .25s,transform .25s; }
+    .finale-open:hover { background:rgba(255,255,255,.2); transform:translateY(-2px); }
+    .finale-open:focus-visible { outline:3px solid #f7c8b9; outline-offset:4px; }
+    .finale-video { display:none; flex-direction:column; align-items:center; gap:17px; width:100%; }
+    .finale-video.visible { display:flex; animation:story-appear .8s cubic-bezier(.2,.7,.3,1) both; }
+    .finale-heading { margin:5px 0 0; max-width:390px; text-align:center; font-family:"Cormorant Garamond",Georgia,serif; font-size:clamp(1.9rem,7.3vw,2.85rem); font-weight:500; line-height:1.06; letter-spacing:-.02em; color:#fff8f4; }
+    .video-shell { overflow:hidden; background:#110e10; border-radius:16px; border:1px solid rgba(255,255,255,.16); box-shadow:0 24px 55px rgba(0,0,0,.34); width:min(76vw,354px); }
+    .video-shell video { width:100%; max-height:62svh; display:block; aspect-ratio:512/682; object-fit:contain; background:#110e10; }
+    .return-hint { font-size:11px; text-align:center; margin:0; color:#d1b4ac; }
+    .memory-story .sound svg { width:18px; height:18px; }
+    @keyframes story-appear { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+    @media (max-width:560px) {
+      .story-card { width:min(90vw,490px); height: min(49svh,335px); min-height:210px; }
+      .story-card .letter-text { font-size:clamp(1.6rem,7.2vw,2.35rem); }
+      .finale-video { gap:11px; }
+      .video-shell { width:min(79vw,345px); }
+      .video-shell video { max-height:59svh; }
+      .finale-heading { font-size:clamp(1.85rem,7.7vw,2.6rem); }
+    }
+    @media (max-height:650px) {
+      .memory-story .memory-inner { gap:7px; }
+      .story-card { height: min(43svh,310px); min-height:165px; }
+      .finale-prelude { min-height:40svh; gap:10px; }
+      .video-shell video { max-height:49svh; }
+      .finale-heading { font-size:clamp(1.7rem,6vw,2.3rem); }
+    }
+
+    /* Tercer recuerdo: pequeño juego privado, nueve preguntas y una cita. */
+    .memory-quiz { background:radial-gradient(ellipse at 50% 0%,#4b3a3b 0%,#2a2224 55%,#171519 100%); }
+    .quiz-shell { width:min(100%,440px); margin:auto; text-align:center; display:flex; flex-direction:column; align-items:center; gap:20px; }
+    .quiz-progress { display:flex; gap:7px; justify-content:center; width:100%; }
+    .quiz-progress span { height:3px; flex:1; background:rgba(251,233,224,.22); border-radius:10px; max-width:30px; transition:background .25s; }
+    .quiz-progress span.done { background:#eccbbd; }
+    .quiz-level { font-size:10px; letter-spacing:.27em; color:#e6c7be; text-transform:uppercase; margin:6px 0 0; }
+    .quiz-heading { font:500 clamp(2.5rem,9vw,3.6rem)/.97 'Cormorant Garamond',Georgia,serif; letter-spacing:-.04em; margin:0; }
+    .quiz-question { font:500 clamp(1.7rem,6vw,2.4rem)/1.12 'Cormorant Garamond',Georgia,serif; margin:18px 0 6px; color:#fff8f2; text-wrap:balance; }
+    .quiz-options { width:100%; display:grid; gap:11px; }
+    .quiz-choice { min-height:56px; padding:14px 17px; border:1px solid rgba(255,236,223,.28); border-radius:18px; background:rgba(255,255,255,.07); color:#fff7f2; text-align:center; font-size:14px; line-height:1.35; transition:background .2s,border-color .2s,transform .2s; }
+    .quiz-choice:hover,.quiz-choice:focus-visible { background:rgba(255,255,255,.14); border-color:rgba(255,236,223,.75); outline:none; }
+    .quiz-choice.wrong { border-color:#c78d89; animation:quiz-shake .28s linear; }
+    .quiz-feedback { min-height:26px; margin:0; font-size:12px; color:#e7c8c0; }
+    .quiz-complete { display:none; flex-direction:column; gap:20px; align-items:center; width:100%; }
+    .quiz-complete.show { display:flex; animation:story-appear .55s ease both; }
+    .quiz-prize { font:500 clamp(2.4rem,9vw,3.7rem)/.98 'Cormorant Garamond',Georgia,serif; margin:0; }
+    .movie-links { display:grid; gap:10px; width:100%; }
+    .movie-links a { text-decoration:none; color:#fff8f4; border:1px solid rgba(255,255,255,.4); border-radius:15px; padding:16px; font-size:14px; background:rgba(255,255,255,.07); }
+    .movie-links a:focus-visible { outline:2px solid #e7c0b0; outline-offset:3px; }
+    @keyframes quiz-shake { 0%,100% {transform:translateX(0)} 30% {transform:translateX(-5px)} 70% {transform:translateX(5px)} }
+    /* Cuarto recuerdo: galería en dos actos, con fotos intactas. */
+    .memory-journey { display:block; padding:0; background:radial-gradient(ellipse at 55% 0%,#4e3b3d 0%,#282124 48%,#171416 100%); overflow-x:hidden; scroll-behavior:smooth; }
+    .journey-wrap { width:min(100%,485px); min-height:100%; margin:auto; padding:72px 22px 58px; }
+    .journey-header { text-align:center; padding:14px 0 24px; }
+    .journey-eyebrow { font:500 10px/1.5 'DM Sans',sans-serif; letter-spacing:.23em; color:#e7c9bd; text-transform:uppercase; margin:0 0 12px; }
+    .journey-title { font:500 clamp(3.25rem,12vw,5rem)/.89 'Cormorant Garamond',serif; letter-spacing:-.035em; margin:0; }
+    .journey-subtitle { font:400 13px/1.6 'DM Sans',sans-serif; color:#e6c8be; max-width:295px; margin:18px auto 0; }
+    .journey-stage { display:none; }
+    .journey-stage.show { display:block; animation:journey-enter .65s cubic-bezier(.2,.75,.2,1) both; }
+    .journey-photo { display:block; margin:0 auto 19px; padding:8px 8px 27px; width:100%; max-width:385px; border-radius:8px; background:#f8f2e9; box-shadow:0 16px 38px rgba(0,0,0,.23); transform:rotate(-.65deg); }
+    .journey-photo:nth-of-type(even) { transform:rotate(.55deg); }
+    .journey-photo img { display:block; width:100%; height:auto; border-radius:3px; }
+    .journey-photo figcaption { color:#8b7b76; font:400 10px/1.3 'DM Sans',sans-serif; letter-spacing:.08em; margin:13px 8px -7px; text-align:center; }
+    .journey-card { position:relative; display:block; width:100%; max-width:385px; border:0; padding:0; margin:0 auto 12px; background:transparent; color:#302727; text-align:center; cursor:pointer; perspective:1200px; -webkit-tap-highlight-color:transparent; }
+    .journey-card.portrait { aspect-ratio: 1152 / 1536; }
+    .journey-card.landscape { aspect-ratio: 1536 / 1152; }
+    .journey-card-inner { display:block; position:absolute; inset:0; transform-style:preserve-3d; transition:transform 1.05s cubic-bezier(.16,.82,.17,1); }
+    .journey-card.flipped .journey-card-inner { transform:rotateY(180deg); }
+    .journey-face { position:absolute; inset:0; overflow:hidden; border-radius:8px; backface-visibility:hidden; -webkit-backface-visibility:hidden; box-shadow:0 19px 47px rgba(0,0,0,.3); }
+    .journey-front { background:#eee4d9; padding:8px 8px 26px; }
+    .journey-front img { width:100%; height:100%; object-fit:cover; object-position:center; border-radius:3px; display:block; }
+    .journey-front::after { content:'un pedacito de nosotros'; position:absolute; left:0; bottom:8px; right:0; font:400 10px/1 'DM Sans',sans-serif; color:#938079; letter-spacing:.04em; }
+    .journey-back { transform:rotateY(180deg); background:linear-gradient(147deg,#fffaf5,#f2e2da); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:27px 27px; }
+    .journey-back::before { content:'✦'; position:absolute; top:18px; color:#b18d7e; }
+    .journey-back p { font:500 clamp(1.58rem,5vw,2.4rem)/1.15 'Cormorant Garamond',Georgia,serif; margin:0; letter-spacing:-.018em; }
+    .journey-back small { display:block; font:400 10px/1.5 'DM Sans',sans-serif; color:#9a7770; letter-spacing:.1em; margin-top:19px; }
+    .journey-card.landscape .journey-back p { font-size:clamp(1.5rem,5vw,2.05rem); }
+    .journey-tap { margin:18px auto 0; text-align:center; font:400 12px/1.5 'DM Sans',sans-serif; letter-spacing:.02em; color:#f6dfd4; }
+    .journey-arrow { text-align:center; padding:17px 0 22px; color:#c9a99d; font-size:25px; }
+    .journey-ending { min-height:75svh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:25px; padding:20px 8px 70px; }
+    .journey-ending .star { font-size:30px; color:#ecc9b7; }
+    .journey-ending h3 { font:500 clamp(2.4rem,10vw,4.4rem)/1.04 'Cormorant Garamond',Georgia,serif; letter-spacing:-.025em; margin:0; color:#fff8f3; }
+    .journey-ending p { font:400 12px/1.6 'DM Sans',sans-serif; color:#d9bcb1; margin:0; }
+    .journey-restart { color:#fff8f2; font:400 12px/1 'DM Sans',sans-serif; padding:13px 20px; border:1px solid #a68b85; border-radius:100px; background:transparent; }
+    .journey-restart:focus-visible,.journey-card:focus-visible {outline:3px solid #f7c8b9;outline-offset:4px;}
+    @keyframes journey-enter { from {opacity:0;transform:translateY(18px)} to {opacity:1;transform:translateY(0)} }
+    @media (max-width:390px) { .journey-wrap{padding-inline:15px}.journey-back{padding:16px 20px}.journey-back p{font-size:1.53rem}.journey-card.landscape .journey-back p{font-size:1.33rem} }
+    @media (prefers-reduced-motion:reduce) { .journey-stage.show {animation:none} .journey-card-inner {transition-duration:.01ms} }
+
+  </style>
+</head>
+<body>
+  <main>
+    <div class="photo-layer" role="img" aria-label="Nuestra foto de fondo"></div>
+    <div class="film" aria-hidden="true"></div>
+    <section class="opening" aria-label="Nuestros recuerdos">
+      <h1 class="title">nuestros<br />recuerdos</h1>
+      <form class="entry" id="keyword-form" autocomplete="off">
+        <label for="keyword" class="visually-hidden">escribir la palabra clave</label>
+        <div class="entry-wrap">
+          <input class="keyword" id="keyword" name="clave" type="text" placeholder="escribir la palabra clave" autocapitalize="none" autocomplete="off" spellcheck="false" enterkeyhint="go" aria-describedby="message" />
+          <button class="submit-key" type="submit" aria-label="abrir recuerdo">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <p class="message" id="message" aria-live="polite"></p>
+      </form>
+    </section>
+    <footer class="footer">un lugar solo nuestro</footer>
+  </main>
+
+  <section class="memory" id="memory" role="dialog" aria-modal="true" aria-labelledby="memory-title" aria-hidden="true">
+    <button class="sound" id="sound" type="button" aria-label="silenciar música" title="activar o silenciar música">
+      <svg id="sound-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+    </button>
+    <button class="close" id="close" type="button" aria-label="volver a la portada">×</button>
+    <div class="memory-inner">
+      <p class="eyebrow">un pedacito de nosotros</p>
+      <h2 class="memory-title" id="memory-title">espejo</h2>
+      <button class="flip-card" id="flip-card" type="button" aria-label="tocar para dar vuelta la foto y leer el mensaje" aria-pressed="false">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><img src="./recuerdo-espejo.jpg" alt="Nuestra foto juntos frente a un espejo" /></div>
+          <div class="flip-face flip-back" aria-hidden="true">
+            <p class="letter-text">
+              <span>aunque hoy nos toque estar lejos,</span>
+              <span>quiero que sientas que sigo cerquita tuyo.</span>
+              <span>hay recuerdos que no se rompen con la distancia.</span>
+              <span>y vos sos uno de los más lindos que tengo en mi vida.</span>
+              <span>te amo</span>
+            </p>
+          </div>
+        </div>
+      </button>
+      <p class="tap-hint" id="tap-hint">tocá la foto para descubrir algo más</p>
+    </div>
+  </section>
+
+
+  <!-- La siguiente carta no revela ninguna otra palabra ni cuántas faltan. -->
+  <section class="memory memory-story" id="memory-encontrarte" role="dialog" aria-modal="true" aria-labelledby="story-title" aria-hidden="true">
+    <button class="sound" id="story-sound" type="button" aria-label="silenciar música" title="activar o silenciar música">
+      <svg id="story-sound-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+    </button>
+    <button class="close" id="story-close" type="button" aria-label="volver a la portada">×</button>
+    <div class="memory-inner">
+      <p class="eyebrow">un pedacito de nosotros</p>
+      <h2 class="memory-title" id="story-title">encontrarte</h2>
+
+      <div class="story-stage active" id="story-step-1">
+        <p class="story-counter">primer recuerdo</p>
+        <button class="flip-card story-card" id="story-card-1" type="button" aria-label="tap para descubrir" aria-pressed="false">
+          <div class="flip-inner">
+            <div class="flip-face flip-front"><img src="./encontrarte-1.jpg" alt="Nuestra foto juntos al aire libre, abrazados" /></div>
+            <div class="flip-face flip-back" aria-hidden="true"><span class="letter-text">solo quiero que sepas que voy a dar lo mejor de mí</span></div>
+          </div>
+        </button>
+        <p class="tap-hint" id="story-hint-1">tap para descubrir</p>
+      </div>
+
+      <div class="story-stage" id="story-step-2">
+        <p class="story-counter">otro pedacito de nosotros</p>
+        <button class="flip-card story-card" id="story-card-2" type="button" aria-label="tap para seguir" aria-pressed="false">
+          <div class="flip-inner">
+            <div class="flip-face flip-front"><img src="./encontrarte-2.jpg" alt="Nuestra foto juntos sentados, sonriendo" /></div>
+            <div class="flip-face flip-back" aria-hidden="true"><span class="letter-text">no me voy a rendir hasta encontrarte</span></div>
+          </div>
+        </button>
+        <p class="tap-hint" id="story-hint-2">tap para seguir</p>
+      </div>
+
+      <div class="story-stage" id="story-step-3">
+        <div class="finale-prelude" id="finale-prelude">
+          <span class="finale-symbol" aria-hidden="true">✦</span>
+          <p class="finale-prompt">hay algo más<br />para vos...</p>
+          <button class="finale-open" id="finale-open" type="button">tap para ver el final</button>
+        </div>
+        <div class="finale-video" id="finale-video">
+          <h3 class="finale-heading">quiero que lo sepas que lo voy a dar todo</h3>
+          <div class="video-shell"><video id="story-video" src="./encontrarte-final.mp4" poster="./encontrarte-poster.jpg" controls playsinline preload="metadata" aria-label="video final para vos"></video></div>
+          <p class="return-hint">este momento es para vos</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Tercer recuerdo: pequeño juego sobre nuestra historia. -->
+  <section class="memory memory-quiz" id="memory-portico" role="dialog" aria-modal="true" aria-labelledby="quiz-main-title" aria-hidden="true">
+    <button class="close" id="quiz-close" type="button" aria-label="volver a la portada">×</button>
+    <div class="quiz-shell">
+      <p class="eyebrow">un juego solo nuestro</p>
+      <h2 class="quiz-heading" id="quiz-main-title">el gran pórtico</h2>
+      <div class="quiz-progress" id="quiz-progress" aria-label="progreso del juego"></div>
+      <div id="quiz-playing" style="width:100%">
+        <p class="quiz-level" id="quiz-level">nivel básico</p>
+        <h3 class="quiz-question" id="quiz-question">¿te acordás?</h3>
+        <div class="quiz-options" id="quiz-options"></div>
+        <p class="quiz-feedback" id="quiz-feedback" aria-live="polite"></p>
+      </div>
+      <div class="quiz-complete" id="quiz-complete">
+        <p class="quiz-prize">felicitaciones, mi amor.<br>ganaste una cita conmigo ♡</p>
+        <p class="return-hint">elegí una película y avisame por WhatsApp</p>
+        <nav class="movie-links" aria-label="elegir película">
+          <a href="https://wa.link/azms9d" target="_blank" rel="noopener noreferrer">La propuesta</a>
+          <a href="https://wa.link/5q4jrg" target="_blank" rel="noopener noreferrer">Amor a distancia</a>
+          <a href="https://wa.link/c0svom" target="_blank" rel="noopener noreferrer">Love, Rosie</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cuarta experiencia: tres fotos del espejo y dos fotos del auto. -->
+  <section class="memory memory-journey" id="memory-siempre" role="dialog" aria-modal="true" aria-labelledby="journey-title" aria-hidden="true">
+    <button class="close" id="journey-close" type="button" aria-label="volver a la portada">×</button>
+    <div class="journey-wrap">
+      <header class="journey-header">
+        <p class="journey-eyebrow">esto es para vos</p>
+        <h2 class="journey-title" id="journey-title">vos podés</h2>
+        <p class="journey-subtitle">a veces hace falta volver a mirar todo lo que ya pudiste hacer</p>
+      </header>
+      <div class="journey-stage show" id="journey-stage-1">
+        <figure class="journey-photo"><img src="./siempre-1.jpg" alt="Nosotros dos frente al espejo, compartiendo una sonrisa" loading="lazy"/><figcaption>un día de tantos</figcaption></figure>
+        <figure class="journey-photo"><img src="./siempre-2.jpg" alt="Nosotros dos en otra foto frente al mismo espejo" loading="lazy"/><figcaption>otro pedacito de ese día</figcaption></figure>
+        <button class="journey-card portrait" id="journey-card-1" type="button" aria-label="tocá la tercera foto para descubrir el mensaje" aria-pressed="false">
+          <span class="journey-card-inner">
+            <span class="journey-face journey-front"><img src="./siempre-3.jpg" alt="Estamos abrazados, ella apoya la cabeza sobre mi hombro" /></span>
+            <span class="journey-face journey-back" aria-hidden="true"><p>este es un recuerdo para que no te olvides de algo importante:<br><br>vos realmente podés con todo.<br><br>como en ese momento, que estabas bancando un montón y, aun así, seguiste.</p><small>siempre</small></span>
+          </span>
+        </button>
+        <p class="journey-tap" id="journey-hint-1">tocá la última foto para descubrir algo</p>
+        <div class="journey-arrow" aria-hidden="true">⌄</div>
+      </div>
+      <div class="journey-stage" id="journey-stage-2">
+        <figure class="journey-photo"><img src="./siempre-4.jpg" alt="En el auto durante nuestro viaje; ella descansa atrás" loading="lazy"/><figcaption>y después vino otro desafío</figcaption></figure>
+        <button class="journey-card landscape" id="journey-card-2" type="button" aria-label="tocá la última foto para leer nuestro recuerdo" aria-pressed="false">
+          <span class="journey-card-inner">
+            <span class="journey-face journey-front"><img src="./siempre-5.jpg" alt="En el auto, sonriendo durante el viaje" /></span>
+            <span class="journey-face journey-back" aria-hidden="true"><p>esto fue cuando cruzamos el país de un día para el otro para poder hacer la residencia.</p><small>y lo hicimos</small></span>
+          </span>
+        </button>
+        <p class="journey-tap" id="journey-hint-2">tocá la última foto para descubrir algo</p>
+      </div>
+      <div class="journey-stage" id="journey-stage-3">
+        <div class="journey-ending">
+          <span class="star" aria-hidden="true">✦</span>
+          <h3>vos siempre vas a ser capaz de hacer lo que quieras, siempre y cuando te lo propongas.</h3>
+          <p>que nunca se te olvide.</p>
+          <button class="journey-restart" id="journey-restart" type="button">volver a ver nuestras fotos</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <audio id="music" src="./musica-recuerdos.mp3" preload="none" loop playsinline></audio>
+  <audio id="story-music" src="./musica-encontrarte.mp3" preload="none" loop playsinline></audio>
+  <script>
+    const form = document.getElementById('keyword-form');
+    const input = document.getElementById('keyword');
+    const status = document.getElementById('message');
+    const overlays = {
+      espejo: document.getElementById('memory'),
+      encontrarte: document.getElementById('memory-encontrarte'),
+      'el gran portico': document.getElementById('memory-portico'),
+      siempre: document.getElementById('memory-siempre')
+    };
+    const tunes = {
+      espejo: document.getElementById('music'),
+      encontrarte: document.getElementById('story-music')
+    };
+    const soundButtons = {
+      espejo: document.getElementById('sound'),
+      encontrarte: document.getElementById('story-sound')
+    };
+    const soundIcons = {
+      espejo: document.getElementById('sound-icon'),
+      encontrarte: document.getElementById('story-sound-icon')
+    };
+    const speaker = '<path d="M11 5L6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>';
+    const mutedSpeaker = '<path d="M11 5L6 9H3v6h3l5 4V5Z"/><path d="m16 9 5 6M21 9l-5 6"/>';
+    let active = null;
+    const video = document.getElementById('story-video');
+
+    function normalizeWord(raw) {
+      return raw.trim().toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+    function setSoundButton(key, muted) {
+      soundIcons[key].innerHTML = muted ? mutedSpeaker : speaker;
+      soundButtons[key].setAttribute('aria-label', muted ? 'activar música' : 'silenciar música');
+    }
+    function resetEspejo() {
+      const card = document.getElementById('flip-card');
+      card.classList.remove('flipped');
+      card.setAttribute('aria-pressed', 'false');
+      card.querySelector('.flip-back').setAttribute('aria-hidden','true');
+      document.getElementById('tap-hint').textContent = 'tocá la foto para descubrir algo más';
+    }
+    function resetEncontrarte() {
+      ['1','2'].forEach(n => {
+        const card = document.getElementById('story-card-' + n);
+        card.classList.remove('flipped');
+        card.setAttribute('aria-pressed', 'false');
+        card.querySelector('.flip-back').setAttribute('aria-hidden','true');
+        document.getElementById('story-hint-' + n).textContent = n === '1' ? 'tap para descubrir' : 'tap para seguir';
+        document.getElementById('story-hint-' + n).classList.remove('is-next');
+      });
+      document.querySelectorAll('.story-stage').forEach(s => s.classList.remove('active'));
+      document.getElementById('story-step-1').classList.add('active');
+      document.getElementById('finale-prelude').style.display = '';
+      document.getElementById('finale-video').classList.remove('visible');
+      video.pause();
+      video.currentTime = 0;
+    }
+    function startMusic(key) {
+      const tune = tunes[key];
+      tune.currentTime = 0;
+      tune.muted = false;
+      tune.volume = 0.15;
+      setSoundButton(key, false);
+      const p = tune.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {
+          setSoundButton(key, true);
+          soundButtons[key].setAttribute('aria-label', 'tocar para escuchar música');
+        });
+      }
+    }
+    function openMemory(key) {
+      if (active) closeMemory(false);
+      active = key;
+      input.blur();
+      status.classList.remove('visible');
+      document.body.style.overflow = 'hidden';
+      if (key === 'espejo') resetEspejo();
+      else if (key === 'encontrarte') resetEncontrarte();
+      else if (key === 'el gran portico') resetQuiz();
+      else if (key === 'siempre') resetJourney();
+      overlays[key].classList.add('active');
+      overlays[key].setAttribute('aria-hidden', 'false');
+      if (tunes[key]) startMusic(key); // Solo las dos cartas con pistas locales.
+      const closeId = key === 'espejo' ? 'close' : key === 'encontrarte' ? 'story-close' : key === 'el gran portico' ? 'quiz-close' : 'journey-close';
+      document.getElementById(closeId).focus({ preventScroll:true });
+    }
+    function closeMemory(restoreFocus = true) {
+      if (!active) return;
+      const key = active;
+      overlays[key].classList.remove('active');
+      overlays[key].setAttribute('aria-hidden','true');
+      if (tunes[key]) {
+        tunes[key].pause();
+        tunes[key].currentTime = 0;
+      }
+      if (key === 'encontrarte') video.pause();
+      document.body.style.overflow = '';
+      active = null;
+      input.value = '';
+      if (restoreFocus) input.focus({preventScroll:true});
+    }
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const key = normalizeWord(input.value);
+      if (!key) return;
+      if (Object.prototype.hasOwnProperty.call(overlays,key)) openMemory(key);
+      else {
+        status.textContent = 'todavía no hay un recuerdo guardado con esa palabra';
+        status.classList.add('visible');
+      }
+    });
+    input.addEventListener('input', () => status.classList.remove('visible'));
+    document.getElementById('close').addEventListener('click', () => closeMemory());
+    document.getElementById('story-close').addEventListener('click', () => closeMemory());
+    document.getElementById('quiz-close').addEventListener('click', () => closeMemory());
+    document.getElementById('journey-close').addEventListener('click', () => closeMemory());
+    document.getElementById('flip-card').addEventListener('click', () => {
+      const card = document.getElementById('flip-card');
+      const flipped = card.classList.toggle('flipped');
+      card.setAttribute('aria-pressed', String(flipped));
+      card.querySelector('.flip-back').setAttribute('aria-hidden', String(!flipped));
+      document.getElementById('tap-hint').textContent = flipped ? 'tocá para volver a ver nuestra foto' : 'tocá la foto para descubrir algo más';
+    });
+    function showStoryStage(n) {
+      document.querySelectorAll('.story-stage').forEach(s => s.classList.remove('active'));
+      const next = document.getElementById('story-step-' + n);
+      next.classList.add('active');
+      if (n <= 2) document.getElementById('story-card-' + n).focus({preventScroll:true});
+      else document.getElementById('finale-open').focus({preventScroll:true});
+    }
+    function handleStoryCard(n) {
+      const card = document.getElementById('story-card-' + n);
+      if (!card.classList.contains('flipped')) {
+        card.classList.add('flipped');
+        card.setAttribute('aria-pressed','true');
+        card.querySelector('.flip-back').setAttribute('aria-hidden','false');
+        const hint = document.getElementById('story-hint-' + n);
+        hint.textContent = '(dale tap de nuevo)';
+        hint.classList.add('is-next');
+        card.setAttribute('aria-label','dale tap de nuevo para seguir');
+      } else showStoryStage(n + 1);
+    }
+    document.getElementById('story-card-1').addEventListener('click', () => handleStoryCard(1));
+    document.getElementById('story-card-2').addEventListener('click', () => handleStoryCard(2));
+    document.getElementById('finale-open').addEventListener('click', () => {
+      document.getElementById('finale-prelude').style.display = 'none';
+      document.getElementById('finale-video').classList.add('visible');
+      // El video tiene audio propio; la canción baja aún más para permitir escucharlo.
+      tunes.encontrarte.volume = 0.06;
+      video.currentTime = 0;
+      const p = video.play();
+      if (p && typeof p.catch === 'function') p.catch(() => { /* controles visibles para iniciar manualmente */ });
+    });
+    video.addEventListener('play', () => { if (active === 'encontrarte') tunes.encontrarte.volume = 0.06; });
+    video.addEventListener('pause', () => { if (active === 'encontrarte') tunes.encontrarte.volume = 0.15; });
+    video.addEventListener('ended', () => { if (active === 'encontrarte') tunes.encontrarte.volume = 0.15; });
+    Object.keys(soundButtons).forEach(key => {
+      soundButtons[key].addEventListener('click', () => {
+        if (active !== key) return;
+        const tune = tunes[key];
+        if (tune.paused) {
+          tune.muted = false;
+          const p = tune.play();
+          if (p && typeof p.then === 'function') p.then(() => setSoundButton(key,false)).catch(() => setSoundButton(key,true));
+        } else {
+          tune.muted = !tune.muted;
+          setSoundButton(key,tune.muted);
+        }
+      });
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && active) closeMemory(); });
+
+    /* Juego del tercer sobre (las opciones de respuesta pueden reemplazarse sin alterar las otras cartas). */
+    const quizData = [
+      {level:'básico',question:'¿En qué departamento y piso vivíamos?',answers:['depto 10, piso 1','depto 12, piso 2','depto 1, piso 10'],correct:0},
+      {level:'básico',question:'¿Qué día fue nuestro primer beso?',answers:['12 de octubre de 2024','22 de octubre de 2024','22 de noviembre de 2024'],correct:1},
+      {level:'básico',question:'¿Qué palabra usábamos para hablar del snowboard?',answers:['ski','snow','surf'],correct:1},
+      {level:'simple',question:'¿En qué barrio vivía mamá?',answers:['500 viviendas','400 viviendas','300 viviendas'],correct:1},
+      {level:'simple',question:'¿En qué departamento estaba lo de la abuela?',answers:['Montevideo','Maldonado','Canelones'],correct:2},
+      {level:'simple',question:'¿Qué yerba tomábamos en Argentina?',answers:['Amanda','Canarias','Playadito'],correct:0},
+      {level:'pro',question:'¿Cuál es mi color favorito?',answers:['verde oscuro','azul marino','gris'],correct:1},
+      {level:'pro',question:'¿A qué lugar soñamos con viajar?',answers:['Hawái','Roma','París'],correct:0},
+      {level:'pro',question:'¿Cómo se llamaba aquel primer trabajo?',answers:['Picasso','Leonardo','Dalí'],correct:0}
+    ];
+    let quizIndex = 0;
+    function resetQuiz() {
+      quizIndex = 0;
+      document.getElementById('quiz-playing').style.display = '';
+      document.getElementById('quiz-complete').classList.remove('show');
+      renderQuiz();
+    }
+    function renderQuiz() {
+      const entry = quizData[quizIndex];
+      if (!entry) {
+        document.getElementById('quiz-playing').style.display = 'none';
+        document.getElementById('quiz-complete').classList.add('show');
+        document.getElementById('quiz-progress').innerHTML = quizData.map(() => '<span class="done"></span>').join('');
+        return;
+      }
+      document.getElementById('quiz-level').textContent = 'nivel ' + entry.level + ' · ' + (quizIndex+1) + ' de 9';
+      document.getElementById('quiz-question').textContent = entry.question;
+      document.getElementById('quiz-feedback').textContent = '';
+      document.getElementById('quiz-progress').innerHTML = quizData.map((_,i) => `<span class="${i<=quizIndex?'done':''}"></span>`).join('');
+      const container = document.getElementById('quiz-options');
+      container.replaceChildren();
+      entry.answers.forEach((a,i) => {
+        const b = document.createElement('button');
+        b.className = 'quiz-choice'; b.type = 'button'; b.textContent = a;
+        b.addEventListener('click', () => {
+          if (i !== entry.correct) {
+            document.getElementById('quiz-feedback').textContent = 'casi… probá otra vez ♡';
+            b.classList.remove('wrong'); void b.offsetWidth; b.classList.add('wrong');
+          } else {
+            quizIndex++; renderQuiz();
+          }
+        });
+        container.appendChild(b);
+      });
+    }
+    /* Dos tandas de fotos. La 3.ª y la 5.ª se dan vuelta y, al segundo tap, avanzan. */
+    const journeyOverlay = document.getElementById('memory-siempre');
+    function showJourneyStage(n) {
+      [1,2,3].forEach(k => document.getElementById('journey-stage-'+k).classList.toggle('show',n===k));
+      journeyOverlay.scrollTop = 0;
+    }
+    function resetJourney() {
+      for (const n of [1,2]) {
+        const el = document.getElementById('journey-card-'+n);
+        el.classList.remove('flipped');
+        el.setAttribute('aria-pressed','false');
+        el.querySelector('.journey-back').setAttribute('aria-hidden','true');
+        document.getElementById('journey-hint-'+n).textContent = 'tocá la última foto para descubrir algo';
+      }
+      showJourneyStage(1);
+    }
+    function handleJourneyCard(n) {
+      const el = document.getElementById('journey-card-'+n);
+      if (!el.classList.contains('flipped')) {
+        el.classList.add('flipped');
+        el.setAttribute('aria-pressed','true');
+        el.querySelector('.journey-back').setAttribute('aria-hidden','false');
+        document.getElementById('journey-hint-'+n).textContent = 'dale tap de nuevo para seguir';
+      } else {
+        showJourneyStage(n+1);
+      }
+    }
+    document.getElementById('journey-card-1').addEventListener('click', () => handleJourneyCard(1));
+    document.getElementById('journey-card-2').addEventListener('click', () => handleJourneyCard(2));
+    document.getElementById('journey-restart').addEventListener('click',resetJourney);
+
+  </script>
+</body>
+</html>
