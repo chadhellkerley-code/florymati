@@ -33,39 +33,256 @@ button.ghost{border:1px solid rgba(255,255,255,.42);border-radius:100px;backgrou
 @media(max-width:760px){.mirror-main,.portico-main{grid-template-columns:1fr;gap:23px;justify-items:center;text-align:center;padding:0 21px 70px}.mirror-copy,.portico-intro{max-width:480px}.mirror-copy .world-title,.portico-intro .world-title{font-size:clamp(4.6rem,16vw,6rem)}.mirror-copy .world-sub,.portico-intro .world-sub{margin:0 auto}.mirror-message{text-align:left}.mirror-frame{height:min(53svh,510px);min-height:295px;width:min(79vw,340px)}.portico-main{gap:23px}.portico-intro .world-sub{font-size:1.45rem}.arch{display:none}.quiz-box{min-height:0}.garden-main{padding-top:12px}.flower-field{margin-top:16px;height:225px}.flower{transform:translateY(var(--offset,0)) scale(.86);margin:0 -9px}.flower:nth-child(2){--offset:-15px}.garden-note{max-width:530px;margin-top:12px}.home-title{font-size:clamp(5.7rem,19vw,7rem)}.top-label{display:none}.journey-main{padding-top:0}.journey-panel{padding:22px 16px}}
 @media(max-width:420px){.home-title{font-size:5.2rem}.home-desc{max-width:275px}.home-top{align-items:flex-start}.world-top{padding:12px 16px;height:60px}.chapter{font-size:8px}.mirror-main{padding-top:5px}.mirror-frame{height:43svh;min-height:270px}.mirror-copy .world-title{font-size:4.6rem}.garden-main .world-title{font-size:5rem}.flower-field{height:207px}.flower{transform:translateY(var(--offset,0)) scale(.74);margin:0 -19px}.garden-note{gap:13px;padding:12px}.garden-note img{width:80px;height:88px}.quiz-box{padding:22px}.journey-main .world-title{font-size:5rem}.polaroid{padding:6px 6px 17px}.polaroid img{height:175px}.preview-switch{bottom:4px;right:4px;left:4px;justify-content:center}.preview-switch button{padding:7px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* ================================
+   EL LIBRO ENCANTADO · premium fairy tale
+   Decorative layers never intercept taps.
+   ================================ */
+:root{
+  --story-gold:#e6cda2;--story-light:#fff4de;--story-rose:#f2d3ca;
+  --storybook:ease;--story-line:rgba(232,207,165,.52);
+}
+html{scroll-behavior:smooth}
+body{background:#11161a}
+.world,.world *{scrollbar-color:#b69b7666 transparent}
+.world{--vine:#d8c4a6;--glow:#f0d9b6;position:fixed;isolation:isolate}
+.world:after{content:"";position:fixed;inset:0;z-index:0;opacity:.12;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E")}
+.world-top,.mirror-main,.garden-main,.portico-main,.journey-main{position:relative;z-index:2}
+.world-top{height:80px;padding:18px clamp(22px,4vw,48px);background:linear-gradient(180deg,#00000035,transparent);color:var(--story-light)}
+.world-top:before{content:"";position:absolute;bottom:0;left:clamp(24px,4vw,48px);right:clamp(24px,4vw,48px);height:1px;background:linear-gradient(90deg,transparent,var(--story-line),transparent);opacity:.7}
+.world .chapter{font-size:10px;letter-spacing:.32em;font-weight:500;color:var(--story-light);opacity:.84}
+.back{font-size:10px;font-weight:700;letter-spacing:.18em;transition:transform .3s,color .3s}
+.back:hover{transform:translateX(-4px);color:var(--story-gold)}
+.back .arr{font-size:28px;font-weight:400}
+.world-title{font-weight:500;letter-spacing:-.06em;text-shadow:0 12px 48px #0002}
+.world-title .handwritten{font-weight:400;color:var(--story-gold)}
+.overline{font-size:10px;letter-spacing:.33em;font-weight:600}
+.world-sub{font-size:clamp(1.25rem,2.7vw,1.85rem);line-height:1.25;letter-spacing:.005em}
+.world .ghost{background:linear-gradient(135deg,#fcead41b,#ffffff08);border:1px solid #e9cbaa9e;box-shadow:0 12px 35px #0002,inset 0 1px 0 #ffffff40;letter-spacing:.08em}
+.world .pill{background:linear-gradient(125deg,#fff4df,#e4c5a0);color:#483329;border:1px solid #fff0d9;box-shadow:0 16px 35px #0003,inset 0 1px 0 #fff9}
+.fairy-vine{position:fixed;width:clamp(140px,22vw,310px);height:clamp(210px,35vw,480px);pointer-events:none;z-index:1;color:var(--vine);opacity:.28;filter:drop-shadow(0 0 15px #fff2)}
+.fairy-vine.left{top:7vh;left:-5vw}
+.fairy-vine.right{right:-6vw;bottom:3vh;transform:rotate(180deg)}
+.fairy-sparks{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.fairy-sparks i{position:absolute;display:block;left:var(--x);top:var(--y);width:var(--w);height:var(--w);border-radius:50%;background:radial-gradient(circle,#fffdf0 0,#f5dbad 26%,#f5d9a444 55%,transparent 75%);box-shadow:0 0 10px 2px #ffdc9a99;opacity:.55;animation:fairyFloat var(--d) ease-in-out infinite alternate;animation-delay:var(--delay)}
+.fairy-sparks i:nth-child(5n){background:#ffffffd9;box-shadow:0 0 9px #fff9}
+@keyframes fairyFloat{0%{transform:translate3d(0,0,0) scale(.6);opacity:.15}45%{opacity:.7}100%{transform:translate3d(var(--move),-32px,0) scale(1.45);opacity:.28}}
+/* Cover: a gilded storybook, not a standard landing page */
+#home{background:#171a18}
+#home:before{filter:saturate(.68) sepia(.16) brightness(.85);animation:softZoom 22s ease-in-out infinite alternate}
+#home:after{background:
+radial-gradient(ellipse 70% 60% at 50% 50%,rgba(22,18,23,.19),rgba(10,14,16,.71) 96%),
+linear-gradient(180deg,#16171bd6 0%,#171d1ba8 44%,#121619e6 100%)}
+#home .home-top{letter-spacing:.18em;color:#f7e9d0}
+#home .brand-seal{width:43px;height:43px;border-color:#e2c9989c;color:#f9eddd;box-shadow:0 0 0 4px #dcc69b15}
+#home .home-center{position:relative;width:min(95vw,720px);max-width:720px;padding:clamp(35px,4.6vw,60px) 26px 35px;border:1px solid #edce9b70;border-radius:38% 38% 18px 18px / 12% 12% 18px 18px;background:linear-gradient(160deg,#181918c4,#241e20b8 50%,#141719d1);box-shadow:0 0 0 1px #f4e1ba2a,0 0 0 9px #f0d8ad0d,0 26px 90px #0008,inset 0 0 100px #dfb88a0e;backdrop-filter:blur(8px)}
+#home .home-center:before{content:"";position:absolute;inset:11px;border:1px solid #f5d5a15a;border-radius:inherit;pointer-events:none}
+#home .home-center:after{content:"✦";position:absolute;top:-23px;left:50%;transform:translateX(-50%);display:grid;place-items:center;width:48px;height:48px;border-radius:50%;border:1px solid #e6cfa3;background:#2c2824;color:#f5e7cb;font-family:var(--serif);font-size:28px;box-shadow:0 0 32px #eac9985c}
+#home .home-mini{color:#e9d0ab;font-size:10px;letter-spacing:.26em}
+#home .home-title{font-size:clamp(4.8rem,11vw,8.6rem);line-height:.79;color:#fff0da;text-shadow:0 2px 18px #e6bb9240,0 15px 48px #0005}
+#home .home-title em{font-weight:400;color:#eacda8}
+#home .home-rule{background:linear-gradient(90deg,transparent,#e4c690,transparent);width:140px;margin:33px 0 23px}
+#home .home-desc{font-size:clamp(1.28rem,2.3vw,1.7rem);max-width:440px;line-height:1.22;color:#efe2d6}
+#home .key-form{background:#f7ead112;border-color:#ebd1a98f;box-shadow:0 8px 24px #0005,inset 0 1px 0 #fff3}
+#home .key-form button{background:linear-gradient(120deg,#fff0d0,#dfc098);color:#43342d}
+#home .home-bottom{color:#e7d3b7}
+.book-flourish{display:flex;gap:13px;align-items:center;justify-content:center;margin:6px auto 24px;font-family:var(--serif);font-size:17px;letter-spacing:.1em;color:#d8b892}
+.book-flourish:before,.book-flourish:after{content:"";height:1px;width:34px;background:linear-gradient(90deg,transparent,#d2b58c)}
+.book-flourish:after{transform:rotate(180deg)}
+.fairy-cover-branch{position:absolute;z-index:0;pointer-events:none;color:#e0c9a3;opacity:.44;width:clamp(130px,23vw,320px);height:60vh;max-height:610px;top:12%;filter:drop-shadow(0 0 18px #efdbad5e)}
+.fairy-cover-branch.left{left:0;transform:rotate(6deg)}
+.fairy-cover-branch.right{right:0;transform:rotate(180deg) scaleX(-1)}
+.fairy-book-corner{position:absolute;width:55px;height:55px;z-index:0;pointer-events:none;border-color:#d9bd88;opacity:.75}
+.fairy-book-corner.lt{left:18px;top:18px;border-left:1px solid;border-top:1px solid;border-radius:28px 0 0 0}
+.fairy-book-corner.rt{right:18px;top:18px;border-right:1px solid;border-top:1px solid;border-radius:0 28px 0 0}
+.fairy-book-corner.lb{left:18px;bottom:18px;border-left:1px solid;border-bottom:1px solid;border-radius:0 0 0 10px}
+.fairy-book-corner.rb{right:18px;bottom:18px;border-right:1px solid;border-bottom:1px solid;border-radius:0 0 10px 0}
+/* 1. The silver moon's mirror */
+#espejo{--vine:#e2c5ce;--glow:#e7d5e9;color:#f6edf0;background:
+radial-gradient(circle at 77% 19%,#b5a9c469 0 4%,transparent 22%),
+radial-gradient(ellipse at 49% 36%,#4f4762 0,#272639 47%,#111823 100%)}
+#espejo:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.32;background:
+radial-gradient(ellipse at 70% 23%,#fff7f0d8 0 1%,#e7bfc65c 2%,transparent 11%),
+repeating-linear-gradient(110deg,transparent 0 110px,#ffffff0d 112px,transparent 115px 230px)}
+#espejo .mirror-copy .overline{color:#edd2e0}
+#espejo .world-title .handwritten{color:#edcbd0}
+#espejo .mirror-main{max-width:1230px}
+#espejo .world-sub{color:#f1dfe9}
+#espejo .mirror-frame{border:10px ridge #d3ae87;background:linear-gradient(120deg,#8f6e4d,#f8dfad 21%,#bc9465 48%,#fce4bc 71%,#72513d);box-shadow:
+0 0 0 2px #f8d8a9a3,0 0 0 11px #a07b5b54,0 0 0 13px #ecd3a85c,
+inset 0 0 0 4px #f9e3ba80,0 30px 100px #000b,0 0 150px #e2c0dc4a}
+#espejo .mirror-frame:before{content:"❧";position:absolute;top:-37px;left:50%;transform:translateX(-50%);font:58px var(--serif);color:#dfc59b;z-index:4;text-shadow:0 3px 13px #1118}
+#espejo .mirror-frame:after{content:"✧";position:absolute;bottom:-23px;left:50%;transform:translateX(-50%);z-index:4;display:grid;place-items:center;width:38px;height:38px;background:#ad8963;border:2px solid #efd7ad;border-radius:50%;font-size:24px;color:#fff4d9}
+#espejo .mirror-glass{box-shadow:inset 0 0 65px #141a26e0}
+#espejo .mirror-message{border-color:#f4d5bd;color:#fff3ec}
+#espejo .mirror-action{border-color:#ebd0c9;color:#fef4ec}
+/* 2. A fairytale rose garden, not a plain gradient */
+#encontrarte{--vine:#9c7c89;--glow:#fff1d2;color:#644f55;background:
+radial-gradient(ellipse at 52% 12%,#fff5ea 0,#f8e4e5 30%,#e7cbd1 59%,#b9c7ba 100%)}
+#encontrarte:before{content:"";position:fixed;inset:0;pointer-events:none;background:
+radial-gradient(ellipse 52% 21% at 48% 35%,#fff7dcaa,transparent 85%),
+radial-gradient(ellipse 110% 26% at 15% 102%,#708e76 0 35%,transparent 60%),
+radial-gradient(ellipse 100% 22% at 87% 104%,#92a58d 0 42%,transparent 66%),
+linear-gradient(180deg,#fff7f245,transparent 63%);opacity:.84}
+#encontrarte .world-top{color:#604e58;background:linear-gradient(180deg,#f9e9e2be,transparent)}
+#encontrarte .world-top .chapter{color:#71545d}
+#encontrarte .world-top:before{background:linear-gradient(90deg,transparent,#9c7e8080,transparent)}
+#encontrarte .garden-main{padding-top:18px}
+#encontrarte .garden-main .overline{color:#9e6c78}
+#encontrarte .world-title{color:#704f5b;text-shadow:0 2px 21px #fff8}
+#encontrarte .world-title .handwritten{color:#a77888}
+#encontrarte .garden-main .world-sub{color:#775f68}
+#encontrarte .flower-field{height:280px;border:0;margin-top:25px}
+#encontrarte .flower-field:after{content:"";position:absolute;bottom:-3px;width:100%;height:22px;background:radial-gradient(ellipse,#6f93704f,transparent 73%);pointer-events:none}
+#encontrarte .flower{filter:drop-shadow(0 14px 7px #51635226);animation:flowerSway 5.5s ease-in-out infinite alternate;transform-origin:50% 100%}
+#encontrarte .flower:nth-child(2){animation-delay:-2s}
+#encontrarte .flower:nth-child(3){animation-delay:-3.6s}
+#encontrarte .petal{border-radius:53% 47% 49% 51%/64% 61% 39% 36%;box-shadow:inset 3px 6px 17px #fff9,0 3px 8px #8d527330}
+#encontrarte .flower:first-child{--petal:#da9ca7}
+#encontrarte .flower:nth-child(2){--petal:#f5e0ab}
+#encontrarte .flower:last-child{--petal:#c9a6d1}
+#encontrarte .stem{background:linear-gradient(90deg,#507b61,#90aa77,#416650)}
+#encontrarte .flower-number{color:#516d55;font-size:10px;font-weight:700;letter-spacing:.15em}
+#encontrarte .garden-note{background:linear-gradient(140deg,#fffdf8f5,#fbf2eaf5);border:1px solid #fffaf5;box-shadow:0 12px 60px #74505b36,0 0 0 4px #ffffff58;border-radius:9px;padding:17px}
+#encontrarte .garden-note:before{content:"✦";position:absolute;right:13px;top:8px;color:#a87983;font-size:16px}
+#encontrarte .garden-finale{background:linear-gradient(160deg,#fef9f3f5,#f7e7e2e8);border:1px solid #fffaf3;box-shadow:0 18px 70px #8b627e48;border-radius:12px}
+#encontrarte .garden-finale h3{color:#6c4958}
+#encontrarte .garden-finale .overline{color:#916e7e}
+#encontrarte .garden-video{box-shadow:0 14px 48px #30212b5c;border:5px solid #fff7ed;border-radius:5px}
+#encontrarte .pill{background:linear-gradient(130deg,#d7a5a8,#9e737c);color:#fff9f6;border-color:#c99ca2}
+@keyframes flowerSway{from{rotate:-2.4deg}to{rotate:2.4deg}}
+/* 3. Forgotten castle gate and its nine magic seals */
+#portico{--vine:#c9b08a;--glow:#f7d9a4;color:#f8ecd8;background:
+radial-gradient(ellipse 45% 60% at 50% 26%,#8a7758 0,#433d38 42%,#1a292b 100%)}
+#portico:before{content:"";position:fixed;inset:0;pointer-events:none;background:
+linear-gradient(90deg,#1321228f,transparent 30%,transparent 70%,#1421228f),
+radial-gradient(ellipse 55% 50% at 54% 39%,#e2c29f3d,transparent 95%),
+repeating-linear-gradient(90deg,transparent 0 107px,#efd9ba10 109px,#0000 114px)}
+#portico .portico-main{max-width:1220px}
+#portico .portico-intro .overline{color:#e3cca9}
+#portico .world-title .handwritten{color:#f1d6ab}
+#portico .arch{height:300px;max-width:370px;background:radial-gradient(circle at 50% 17%,#fce1ae 0,#d1aa79 28%,#8e6c60 58%,#403a42 100%);
+border:17px ridge #c5a273;box-shadow:0 0 0 5px #705138,0 0 0 12px #c5a16e,0 0 0 14px #e3bd8b75,inset 0 0 60px #241a1caa,0 15px 70px #0008,0 0 85px #f3c9883d}
+#portico .arch:before,#portico .arch:after{background:
+linear-gradient(90deg,#4c3327,#9a7556 30%,#6e4f37 66%,#51372b),
+repeating-linear-gradient(0deg,transparent 0 34px,#291c1733 36px,#2b180a44 38px);
+background-blend-mode:multiply;border:2px solid #e6c292}
+#portico .arch-heart{color:#f9e5bb;text-shadow:0 0 38px #ffe8ac,0 0 67px #ffe8ac;animation:enchantedGlow 4s ease-in-out infinite}
+@keyframes enchantedGlow{50%{text-shadow:0 0 18px #ffd698,0 0 95px #f9c783}}
+#portico .quiz-box{border-radius:10px;border:1px solid #d9b98e;background:linear-gradient(135deg,#171e21ac,#302a26cc);box-shadow:0 25px 90px #0009,0 0 0 7px #e4c9a30e,inset 0 0 38px #e4c69a12}
+#portico .quiz-box:before{content:"✧  ✦  ✧";display:block;text-align:center;color:#e9c795;letter-spacing:.9em;margin:-6px auto 21px;font:16px var(--serif)}
+#portico .quiz-progress span{height:5px;background:#ede0c635}
+#portico .quiz-progress span.done{background:#efcf8c;box-shadow:0 0 11px #efcc9299}
+#portico .quiz-options button{position:relative;padding:15px 16px 15px 53px;border-radius:6px;border-color:#d9c49c77;background:linear-gradient(105deg,#f3e1c20b,#ffffff03);font-size:14px}
+#portico .quiz-options button:before{content:"I";position:absolute;left:16px;top:50%;transform:translateY(-50%);width:23px;height:23px;display:grid;place-items:center;border:1px solid #d1ba9566;border-radius:50%;font:14px var(--serif);color:#e7c89a}
+#portico .quiz-options button:nth-child(2):before{content:"II"}
+#portico .quiz-options button:nth-child(3):before{content:"III"}
+#portico .quiz-options button:hover{background:#f0d4a924;transform:translateX(3px)}
+#portico .quiz-question{color:#fff1de}
+#portico .quiz-finish .movie-link{border-radius:7px;border-color:#ead3a37a}
+/* 4. The queen's night sky and luminous constellation path */
+#siempre{--vine:#c4d0e5;--glow:#f6e3bd;color:#fff1de;background:
+radial-gradient(ellipse 48% 52% at 50% -2%,#546680 0,#2b334d 37%,#101b2e 86%,#0d1322 100%)}
+#siempre:before{content:"";position:fixed;inset:0;pointer-events:none;background:
+radial-gradient(circle 68px at 82% 16%,#f5ebce 0,#e9dfc1 63%,#e3dbba9c 66%,transparent 69%),
+radial-gradient(circle 148px at 80% 14%,#e8d8b217,transparent 100%),
+radial-gradient(ellipse 54% 40% at 33% 64%,#4354783d,transparent 95%);
+opacity:.93}
+#siempre .sky{opacity:1;background-image:
+radial-gradient(1px 1px at 14% 19%,#fff1cd 99%,transparent),
+radial-gradient(2px 2px at 72% 11%,#ffedd2 99%,transparent),
+radial-gradient(1px 1px at 44% 36%,#fff8e2 99%,transparent),
+radial-gradient(2px 2px at 89% 56%,#fbe2c8 99%,transparent),
+radial-gradient(1px 1px at 20% 69%,#ffefe4 99%,transparent),
+radial-gradient(1px 1px at 64% 74%,#ffefe4 99%,transparent),
+radial-gradient(2px 2px at 35% 86%,#ffefe4 99%,transparent);
+background-size:100% 100%}
+#siempre .world-title .handwritten{color:#e9d3a6}
+#siempre .journey-main .overline{color:#e4d4b0}
+#siempre .journey-panel{border-radius:8px;background:linear-gradient(155deg,#26334ccf,#1e2941d6);border:1px solid #e4cc9f91;box-shadow:0 27px 90px #000a,0 0 0 7px #e3c68e13,inset 0 0 56px #e9cc9710}
+#siempre .journey-panel:before{content:"✦";display:block;margin:-6px auto 11px;color:#e8d4ac;font:24px var(--serif)}
+#siempre .polaroid{border-radius:2px;background:#fff7e9;box-shadow:0 11px 28px #02081299;transition:transform .4s ease}
+#siempre .polaroid:hover{transform:rotate(0) translateY(-4px)}
+#siempre .journey-meter span{box-shadow:0 0 0 5px #e9d29c18,0 0 20px #ebd2a22b}
+#siempre .journey-meter span.done{background:#f0d4a3;box-shadow:0 0 20px #f8dfa380}
+#siempre .journey-panel .pill{background:linear-gradient(125deg,#fff0d2,#dfbe88)}
+/* Page-turn interstitial */
+.page-turn{position:fixed;inset:0;z-index:55;display:grid;place-content:center;text-align:center;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,#3b342d,#151a1a);color:#f5ead8;transform:scale(1.07)}
+.page-turn.is-turning{animation:turnPage 1.24s ease-in-out both}
+.page-turn .page-mark{font:42px var(--serif);color:#eed3a4;margin:0 auto 16px;filter:drop-shadow(0 0 26px #dfc39c)}
+.page-turn p{font-size:10px;letter-spacing:.36em;text-transform:uppercase;margin-bottom:16px;color:#ead3af}
+.page-turn h2{font:400 clamp(2.8rem,8vw,5rem)/1 var(--serif);letter-spacing:-.025em;margin:0}
+.page-turn .rule{height:1px;width:150px;margin:27px auto 0;background:linear-gradient(90deg,transparent,#d8be92,transparent)}
+@keyframes turnPage{0%{opacity:0;transform:scale(1.08)}16%{opacity:1;transform:scale(1)}55%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.96)}}
+/* The decorative ornamentation retreats when screen space is tight */
+@media(max-width:760px){
+ #home .home-center{width:min(94vw,540px);padding:43px 18px 25px;border-radius:35% 35% 15px 15px/11% 11% 15px 15px}
+ #home .home-title{font-size:clamp(4.25rem,16vw,6.7rem)}
+ #home .home-desc{max-width:320px}
+ .fairy-cover-branch{opacity:.17;width:145px}
+ .fairy-vine{opacity:.15;width:170px;height:280px}
+ .world-top{height:66px;padding:11px 17px}
+ .world-top .chapter{letter-spacing:.15em;font-size:9px}
+ #portico .arch{display:block;margin:23px auto 6px;height:165px;width:min(58vw,230px);border-width:11px}
+ #portico .arch-caption{margin:16px auto 0}
+ #portico .portico-intro .world-title{margin-bottom:11px}
+ #portico .portico-intro .world-sub{margin-top:0;font-size:1.25rem}
+ #portico .portico-main{padding-bottom:100px;gap:18px}
+ #portico .quiz-box{max-width:510px}
+ #encontrarte .flower-field{height:222px}
+ #encontrarte .garden-main{padding-top:10px}
+ #siempre:before{background:radial-gradient(circle 41px at 88% 15%,#ede3c1 0,#e8dfbd 65%,transparent 69%)}
+}
+@media(max-width:420px){
+ #home .home-center{padding:38px 18px 21px}
+ #home .home-title{font-size:clamp(3.75rem,16vw,5rem)}
+ #home .home-mini{font-size:9px;letter-spacing:.12em}
+ #home .home-desc{font-size:1.25rem}
+ .book-flourish{margin:0 auto 18px}
+ #encontrarte .flower-field{height:200px}
+ #portico .arch{height:125px;width:160px}
+ #portico .quiz-box{padding:21px}
+ #portico .quiz-question{font-size:clamp(1.75rem,8vw,2.3rem)}
+ #siempre .journey-panel{padding:21px 14px}
+}
+@media(prefers-reduced-motion:reduce){
+ .fairy-sparks i,#encontrarte .flower{animation:none!important}
+ .page-turn.is-turning{animation:none;opacity:0}
+}
+
 </style>
 </head>
 <body>
-<main id="home">
+<main id="home" class="fairytale-cover"><div class="fairy-cover-branch left" aria-hidden="true"><svg viewBox="0 0 260 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M3 480C67 393 32 299 92 221S174 99 154 5"/><path d="M23 454C89 390 145 366 193 299"/><path d="M67 355C111 333 142 291 151 245"/><path d="M98 218C30 174 28 121 41 73"/><path d="M151 108C190 132 215 170 225 220"/><path d="M38 405c38-16 45-43 43-64-41 2-53 30-43 64Z"/><path d="M75 320c45-3 65-29 76-53-41-9-68 15-76 53Z"/><path d="M99 214c-47-3-66-36-72-58 40-6 70 16 72 58Z"/><path d="M154 105c41-22 58-51 64-75-42-1-63 25-64 75Z"/><path d="M194 295c26-37 46-43 64-44-4 38-23 57-64 44Z"/><path d="M150 245c37-27 59-26 81-19-20 33-40 44-81 19Z"/><path d="M154 5c-7 35-8 65 12 94"/></g><g stroke="currentColor" stroke-width="1"><circle cx="43" cy="72" r="5"/><circle cx="169" cy="130" r="5"/><circle cx="224" cy="218" r="4"/><circle cx="200" cy="296" r="6"/><circle cx="92" cy="225" r="3.5"/><path d="M43 60v24M31 72h24M200 282v28m-14-14h28"/></g></svg></div><div class="fairy-cover-branch right" aria-hidden="true"><svg viewBox="0 0 260 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M3 480C67 393 32 299 92 221S174 99 154 5"/><path d="M23 454C89 390 145 366 193 299"/><path d="M67 355C111 333 142 291 151 245"/><path d="M98 218C30 174 28 121 41 73"/><path d="M151 108C190 132 215 170 225 220"/><path d="M38 405c38-16 45-43 43-64-41 2-53 30-43 64Z"/><path d="M75 320c45-3 65-29 76-53-41-9-68 15-76 53Z"/><path d="M99 214c-47-3-66-36-72-58 40-6 70 16 72 58Z"/><path d="M154 105c41-22 58-51 64-75-42-1-63 25-64 75Z"/><path d="M194 295c26-37 46-43 64-44-4 38-23 57-64 44Z"/><path d="M150 245c37-27 59-26 81-19-20 33-40 44-81 19Z"/><path d="M154 5c-7 35-8 65 12 94"/></g><g stroke="currentColor" stroke-width="1"><circle cx="43" cy="72" r="5"/><circle cx="169" cy="130" r="5"/><circle cx="224" cy="218" r="4"/><circle cx="200" cy="296" r="6"/><circle cx="92" cy="225" r="3.5"/><path d="M43 60v24M31 72h24M200 282v28m-14-14h28"/></g></svg></div>
   <div class="grain" aria-hidden="true"></div><span class="home-glimmer g1" aria-hidden="true">✦</span><span class="home-glimmer g2" aria-hidden="true">✧</span><span class="home-glimmer g3" aria-hidden="true">✦</span>
   <div class="home-top"><div class="home-brand"><span class="brand-seal">m·f</span><span>para nosotros</span></div><span class="top-label">un rincón de nuestra historia</span></div>
-  <div class="home-center"><div class="home-mini">Mati &amp; Flor · 2024 — para siempre</div><h1 class="home-title">nuestros <em>recuerdos</em></h1><div class="home-rule"></div><p class="home-desc">Hay cosas que no se olvidan.<br>Se vuelven a vivir.</p>
-    <form class="key-form" id="key-form"><label for="secret" style="position:absolute;clip:rect(0,0,0,0)">Palabra secreta</label><input id="secret" type="text" placeholder="escribí nuestra palabra secreta…" autocomplete="off" spellcheck="false" maxlength="50"><button aria-label="abrir recuerdo" type="submit">↗</button></form><p class="key-error" id="key-error" role="status">todavía no guardamos un recuerdo con esa palabra ♡</p><p class="hint" style="margin:7px 0 0">una palabra puede abrir un mundo</p>
+  <div class="home-center"><span class="fairy-book-corner lt"></span><span class="fairy-book-corner rt"></span><span class="fairy-book-corner lb"></span><span class="fairy-book-corner rb"></span><div class="book-flourish">✧ &nbsp; EL LIBRO ENCANTADO &nbsp; ✧</div><div class="home-mini">había una vez · Mati &amp; Flor</div><h1 class="home-title">nuestros <em>recuerdos</em></h1><div class="home-rule"></div><p class="home-desc">Los cuentos más lindos no se inventan.<br>Se viven. Y este es el nuestro.</p>
+    <form class="key-form" id="key-form"><label for="secret" style="position:absolute;clip:rect(0,0,0,0)">Palabra secreta</label><input id="secret" type="text" placeholder="una palabra para abrir un capítulo…" autocomplete="off" spellcheck="false" maxlength="50"><button aria-label="abrir recuerdo" type="submit">↗</button></form><p class="key-error" id="key-error" role="status">todavía no guardamos un recuerdo con esa palabra ♡</p><p class="hint" style="margin:7px 0 0">una palabra puede abrir un mundo</p>
   </div><div class="home-bottom"><span>hecho con amor</span><span>✧</span><span>para flor</span></div>
 </main>
 <!-- ESPEJO -->
-<section class="world" id="espejo" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="espejo-heading">
+<section class="world" id="espejo" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="espejo-heading"><div class="fairy-sparks" aria-hidden="true"></div><div class="fairy-vine left" aria-hidden="true"><svg viewBox="0 0 260 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M3 480C67 393 32 299 92 221S174 99 154 5"/><path d="M23 454C89 390 145 366 193 299"/><path d="M67 355C111 333 142 291 151 245"/><path d="M98 218C30 174 28 121 41 73"/><path d="M151 108C190 132 215 170 225 220"/><path d="M38 405c38-16 45-43 43-64-41 2-53 30-43 64Z"/><path d="M75 320c45-3 65-29 76-53-41-9-68 15-76 53Z"/><path d="M99 214c-47-3-66-36-72-58 40-6 70 16 72 58Z"/><path d="M154 105c41-22 58-51 64-75-42-1-63 25-64 75Z"/><path d="M194 295c26-37 46-43 64-44-4 38-23 57-64 44Z"/><path d="M150 245c37-27 59-26 81-19-20 33-40 44-81 19Z"/><path d="M154 5c-7 35-8 65 12 94"/></g><g stroke="currentColor" stroke-width="1"><circle cx="43" cy="72" r="5"/><circle cx="169" cy="130" r="5"/><circle cx="224" cy="218" r="4"/><circle cx="200" cy="296" r="6"/><circle cx="92" cy="225" r="3.5"/><path d="M43 60v24M31 72h24M200 282v28m-14-14h28"/></g></svg></div><div class="fairy-vine right" aria-hidden="true"><svg viewBox="0 0 260 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M3 480C67 393 32 299 92 221S174 99 154 5"/><path d="M23 454C89 390 145 366 193 299"/><path d="M67 355C111 333 142 291 151 245"/><path d="M98 218C30 174 28 121 41 73"/><path d="M151 108C190 132 215 170 225 220"/><path d="M38 405c38-16 45-43 43-64-41 2-53 30-43 64Z"/><path d="M75 320c45-3 65-29 76-53-41-9-68 15-76 53Z"/><path d="M99 214c-47-3-66-36-72-58 40-6 70 16 72 58Z"/><path d="M154 105c41-22 58-51 64-75-42-1-63 25-64 75Z"/><path d="M194 295c26-37 46-43 64-44-4 38-23 57-64 44Z"/><path d="M150 245c37-27 59-26 81-19-20 33-40 44-81 19Z"/><path d="M154 5c-7 35-8 65 12 94"/></g><g stroke="currentColor" stroke-width="1"><circle cx="43" cy="72" r="5"/><circle cx="169" cy="130" r="5"/><circle cx="224" cy="218" r="4"/><circle cx="200" cy="296" r="6"/><circle cx="92" cy="225" r="3.5"/><path d="M43 60v24M31 72h24M200 282v28m-14-14h28"/></g></svg></div>
   <div class="world-top"><button class="back" data-close><span class="arr">←</span> volver</button><span class="chapter">capítulo i · espejo</span><button class="sound" data-sound="recuerdos" title="Activar o silenciar música" aria-label="Activar o silenciar música">♫</button></div>
-  <div class="mirror-main"><div class="mirror-copy"><p class="overline">lo que la distancia no borra</p><h2 class="world-title" id="espejo-heading">lo que<br><span class="handwritten">refleja</span><br>el amor</h2><p class="world-sub">Hay recuerdos que viven en nosotros, incluso cuando estamos lejos.</p><p class="hint">Deslizá el dedo por el espejo para descubrir nuestra foto.</p><button type="button" class="ghost mirror-action" id="mirror-reveal">revelar nuestro recuerdo ↗</button><div class="mirror-message" id="mirror-message"><p>“Aunque hoy nos toque estar lejos, quiero que sientas que sigo cerquita tuyo. Hay recuerdos que no se rompen con la distancia, y vos sos uno de los más lindos que tengo en mi vida.”</p><strong>Te amo ♡</strong></div></div>
+  <div class="mirror-main"><div class="mirror-copy"><p class="overline">i · el espejo de los recuerdos</p><h2 class="world-title" id="espejo-heading">lo que<br><span class="handwritten">refleja</span><br>el amor</h2><p class="world-sub">Hay recuerdos que viven en nosotros, incluso cuando estamos lejos.</p><p class="hint">Deslizá el dedo por el espejo para descubrir nuestra foto.</p><button type="button" class="ghost mirror-action" id="mirror-reveal">revelar nuestro recuerdo ↗</button><div class="mirror-message" id="mirror-message"><p>“Aunque hoy nos toque estar lejos, quiero que sientas que sigo cerquita tuyo. Hay recuerdos que no se rompen con la distancia, y vos sos uno de los más lindos que tengo en mi vida.”</p><strong>Te amo ♡</strong></div></div>
   <div class="mirror-frame"><div class="mirror-glass"><img src="./recuerdo-espejo.jpg" alt="Nuestra fotografía frente al espejo"><canvas id="fog-canvas" aria-label="Espejo empañado: deslizá para descubrir la imagen"></canvas><div class="mirror-sheen"></div></div></div></div>
 </section>
 <!-- ENCONTRARTE -->
-<section class="world" id="encontrarte" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="encontrarte-heading">
+<section class="world" id="encontrarte" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="encontrarte-heading"><div class="fairy-sparks" aria-hidden="true"></div><div class="fairy-vine left" aria-hidden="true"><svg viewBox="0 0 260 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M3 480C67 393 32 299 92 221S174 99 154 5"/><path d="M23 454C89 390 145 366 193 299"/><path d="M67 355C111 333 142 291 151 245"/><path d="M98 218C30 174 28 121 41 73"/><path d="M151 108C190 132 215 170 225 220"/><path d="M38 405c38-16 45-43 43-64-41 2-53 30-43 64Z"/><path d="M75 320c45-3 65-29 76-53-41-9-68 15-76 53Z"/><path d="M99 214c-47-3-66-36-72-58 40-6 70 16 72 58Z"/><path d="M154 105c41-22 58-51 64-75-42-1-63 25-64 75Z"/><path d="M194 295c26-37 46-43 64-44-4 38-23 57-64 44Z"/><path d="M150 245c37-27 59-26 81-19-20 33-40 44-81 19Z"/><path d="M154 5c-7 35-8 65 12 94"/></g><g stroke="currentColor" stroke-width="1"><circle cx="43" cy="72" r="5"/><circle cx="169" cy="130" r="5"/><circle cx="224" cy="218" r="4"/><circle cx="200" cy="296" r="6"/><circle cx="92" cy="225" r="3.5"/><path d="M43 60v24M31 72h24M200 282v28m-14-14h28"/></g></svg></div><div class="fairy-vine right" aria-hidden="true"><svg viewBox="0 0 260 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M3 480C67 393 32 299 92 221S174 99 154 5"/><path d="M23 454C89 390 145 366 193 299"/><path d="M67 355C111 333 142 291 151 245"/><path d="M98 218C30 174 28 121 41 73"/><path d="M151 108C190 132 215 170 225 220"/><path d="M38 405c38-16 45-43 43-64-41 2-53 30-43 64Z"/><path d="M75 320c45-3 65-29 76-53-41-9-68 15-76 53Z"/><path d="M99 214c-47-3-66-36-72-58 40-6 70 16 72 58Z"/><path d="M154 105c41-22 58-51 64-75-42-1-63 25-64 75Z"/><path d="M194 295c26-37 46-43 64-44-4 38-23 57-64 44Z"/><path d="M150 245c37-27 59-26 81-19-20 33-40 44-81 19Z"/><path d="M154 5c-7 35-8 65 12 94"/></g><g stroke="currentColor" stroke-width="1"><circle cx="43" cy="72" r="5"/><circle cx="169" cy="130" r="5"/><circle cx="224" cy="218" r="4"/><circle cx="200" cy="296" r="6"/><circle cx="92" cy="225" r="3.5"/><path d="M43 60v24M31 72h24M200 282v28m-14-14h28"/></g></svg></div>
   <div class="world-top"><button class="back" data-close><span class="arr">←</span> volver</button><span class="chapter">capítulo ii · encontrarte</span><button class="sound" data-sound="encontrarte" title="Activar o silenciar música" aria-label="Activar o silenciar música">♫</button></div>
-  <div class="garden-main"><p class="overline">hay amores que florecen</p><h2 class="world-title" id="encontrarte-heading">un jardín<br><span class="handwritten">para vos</span></h2><p class="world-sub">Cada flor guarda algo que quiero decirte. Tocá las tres para descubrirlo.</p>
+  <div class="garden-main"><p class="overline">ii · el jardín de las promesas</p><h2 class="world-title" id="encontrarte-heading">un jardín<br><span class="handwritten">para vos</span></h2><p class="world-sub">Cada flor guarda algo que quiero decirte. Tocá las tres para descubrirlo.</p>
   <div class="flower-field" id="flower-field"><div class="flower" data-flower="0"><span class="stem"></span><button type="button" aria-label="Abrir flor 1"></button><span class="flower-number">i · promesa</span></div><div class="flower" data-flower="1"><span class="stem"></span><button type="button" aria-label="Abrir flor 2"></button><span class="flower-number">ii · esperanza</span></div><div class="flower" data-flower="2"><span class="stem"></span><button type="button" aria-label="Abrir flor 3"></button><span class="flower-number">iii · para vos</span></div></div>
   <div class="garden-note hidden" id="garden-note" aria-live="polite"><img id="note-img" alt="Foto de Mati y Flor" src="./encontrarte-1.jpg"><div><span class="note-num" id="note-number">primera flor</span><p id="note-text"></p></div></div><div class="flower-finish" id="flower-finish">descubriste <b id="flower-count">0</b> de 3 flores</div>
   <div class="garden-finale hidden" id="garden-finale"><span class="overline">una última cosa</span><h3>quiero decirte esto <span class="handwritten">mirándote a los ojos.</span></h3><button class="pill" id="show-video" type="button">ver mi mensaje para vos ♡</button><video class="garden-video" id="final-video" poster="./encontrarte-poster.jpg" src="./encontrarte-final.mp4" controls playsinline preload="metadata" style="display:none"></video><small id="video-note" style="display:none">para vos, con todo mi amor</small></div>
   </div>
 </section>
 <!-- PORTICO -->
-<section class="world" id="portico" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="portico-heading"><div class="world-top"><button class="back" data-close><span class="arr">←</span> volver</button><span class="chapter">capítulo iii · el gran pórtico</span><span style="width:34px"></span></div>
-<div class="portico-main"><div class="portico-intro"><p class="overline">nueve preguntas, una sorpresa</p><h2 class="world-title" id="portico-heading">el gran<br><span class="handwritten">pórtico</span></h2><p class="world-sub">Hay puertas que solo se abren con recuerdos compartidos. ¿Te acordás de nuestra historia?</p><div class="arch" id="arch"><span class="arch-heart">♡</span></div><p class="arch-caption" id="arch-caption">cada respuesta abre un poquito más la puerta</p></div>
+<section class="world" id="portico" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="portico-heading"><div class="fairy-sparks" aria-hidden="true"></div><div class="fairy-vine left" aria-hidden="true"><svg viewBox="0 0 260 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M3 480C67 393 32 299 92 221S174 99 154 5"/><path d="M23 454C89 390 145 366 193 299"/><path d="M67 355C111 333 142 291 151 245"/><path d="M98 218C30 174 28 121 41 73"/><path d="M151 108C190 132 215 170 225 220"/><path d="M38 405c38-16 45-43 43-64-41 2-53 30-43 64Z"/><path d="M75 320c45-3 65-29 76-53-41-9-68 15-76 53Z"/><path d="M99 214c-47-3-66-36-72-58 40-6 70 16 72 58Z"/><path d="M154 105c41-22 58-51 64-75-42-1-63 25-64 75Z"/><path d="M194 295c26-37 46-43 64-44-4 38-23 57-64 44Z"/><path d="M150 245c37-27 59-26 81-19-20 33-40 44-81 19Z"/><path d="M154 5c-7 35-8 65 12 94"/></g><g stroke="currentColor" stroke-width="1"><circle cx="43" cy="72" r="5"/><circle cx="169" cy="130" r="5"/><circle cx="224" cy="218" r="4"/><circle cx="200" cy="296" r="6"/><circle cx="92" cy="225" r="3.5"/><path d="M43 60v24M31 72h24M200 282v28m-14-14h28"/></g></svg></div><div class="fairy-vine right" aria-hidden="true"><svg viewBox="0 0 260 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M3 480C67 393 32 299 92 221S174 99 154 5"/><path d="M23 454C89 390 145 366 193 299"/><path d="M67 355C111 333 142 291 151 245"/><path d="M98 218C30 174 28 121 41 73"/><path d="M151 108C190 132 215 170 225 220"/><path d="M38 405c38-16 45-43 43-64-41 2-53 30-43 64Z"/><path d="M75 320c45-3 65-29 76-53-41-9-68 15-76 53Z"/><path d="M99 214c-47-3-66-36-72-58 40-6 70 16 72 58Z"/><path d="M154 105c41-22 58-51 64-75-42-1-63 25-64 75Z"/><path d="M194 295c26-37 46-43 64-44-4 38-23 57-64 44Z"/><path d="M150 245c37-27 59-26 81-19-20 33-40 44-81 19Z"/><path d="M154 5c-7 35-8 65 12 94"/></g><g stroke="currentColor" stroke-width="1"><circle cx="43" cy="72" r="5"/><circle cx="169" cy="130" r="5"/><circle cx="224" cy="218" r="4"/><circle cx="200" cy="296" r="6"/><circle cx="92" cy="225" r="3.5"/><path d="M43 60v24M31 72h24M200 282v28m-14-14h28"/></g></svg></div><div class="world-top"><button class="back" data-close><span class="arr">←</span> volver</button><span class="chapter">capítulo iii · el gran pórtico</span><span style="width:34px"></span></div>
+<div class="portico-main"><div class="portico-intro"><p class="overline">iii · la puerta de las historias</p><h2 class="world-title" id="portico-heading">el gran<br><span class="handwritten">pórtico</span></h2><p class="world-sub">Hay puertas que solo se abren con recuerdos compartidos. ¿Te acordás de nuestra historia?</p><div class="arch" id="arch"><span class="arch-heart">♡</span></div><p class="arch-caption" id="arch-caption">cada respuesta abre un poquito más la puerta</p></div>
 <div class="quiz-box"><div id="quiz-active"><span class="quiz-count" id="quiz-count">pregunta 01 de 09</span><div class="quiz-progress" id="quiz-progress"></div><h3 class="quiz-question" id="quiz-question"></h3><div class="quiz-options" id="quiz-options"></div><p class="quiz-feedback" id="quiz-feedback" role="status"></p></div><div class="quiz-finish" id="quiz-finish"><p class="overline">abriste la puerta ♡</p><h3>felicitaciones, mi amor.<br>ganaste una cita conmigo.</h3><p>Elegí una película y avisame por WhatsApp:</p><a class="movie-link" href="https://wa.link/azms9d" target="_blank" rel="noopener">La propuesta ↗</a><a class="movie-link" href="https://wa.link/5q4jrg" target="_blank" rel="noopener">Amor a distancia ↗</a><a class="movie-link" href="https://wa.link/c0svom" target="_blank" rel="noopener">Love, Rosie ↗</a></div></div></div></section>
 <!-- SIEMPRE -->
-<section class="world" id="siempre" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="siempre-heading"><div class="sky"></div><div class="world-top"><button class="back" data-close><span class="arr">←</span> volver</button><span class="chapter">capítulo iv · siempre</span><span style="width:34px"></span></div>
-<div class="journey-main"><p class="overline">todas las estrellas que ya alcanzaste</p><h2 class="world-title" id="siempre-heading">vos <span class="handwritten">podés</span></h2><p class="world-sub">A veces hace falta volver a mirar todo lo que ya pudiste hacer.</p><div class="journey-meter" id="journey-meter"><span>✦</span><span>✦</span><span>✦</span></div><div class="journey-panel" id="journey-panel" aria-live="polite"></div></div></section>
-<div class="preview-switch" id="preview-switch"><span>VISTA PREVIA</span><button data-preview="espejo">Espejo</button><button data-preview="encontrarte">Encontrarte</button><button data-preview="portico">El pórtico</button><button data-preview="siempre">Siempre</button></div>
+<section class="world" id="siempre" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="siempre-heading"><div class="fairy-sparks" aria-hidden="true"></div><div class="fairy-vine left" aria-hidden="true"><svg viewBox="0 0 260 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M3 480C67 393 32 299 92 221S174 99 154 5"/><path d="M23 454C89 390 145 366 193 299"/><path d="M67 355C111 333 142 291 151 245"/><path d="M98 218C30 174 28 121 41 73"/><path d="M151 108C190 132 215 170 225 220"/><path d="M38 405c38-16 45-43 43-64-41 2-53 30-43 64Z"/><path d="M75 320c45-3 65-29 76-53-41-9-68 15-76 53Z"/><path d="M99 214c-47-3-66-36-72-58 40-6 70 16 72 58Z"/><path d="M154 105c41-22 58-51 64-75-42-1-63 25-64 75Z"/><path d="M194 295c26-37 46-43 64-44-4 38-23 57-64 44Z"/><path d="M150 245c37-27 59-26 81-19-20 33-40 44-81 19Z"/><path d="M154 5c-7 35-8 65 12 94"/></g><g stroke="currentColor" stroke-width="1"><circle cx="43" cy="72" r="5"/><circle cx="169" cy="130" r="5"/><circle cx="224" cy="218" r="4"/><circle cx="200" cy="296" r="6"/><circle cx="92" cy="225" r="3.5"/><path d="M43 60v24M31 72h24M200 282v28m-14-14h28"/></g></svg></div><div class="fairy-vine right" aria-hidden="true"><svg viewBox="0 0 260 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M3 480C67 393 32 299 92 221S174 99 154 5"/><path d="M23 454C89 390 145 366 193 299"/><path d="M67 355C111 333 142 291 151 245"/><path d="M98 218C30 174 28 121 41 73"/><path d="M151 108C190 132 215 170 225 220"/><path d="M38 405c38-16 45-43 43-64-41 2-53 30-43 64Z"/><path d="M75 320c45-3 65-29 76-53-41-9-68 15-76 53Z"/><path d="M99 214c-47-3-66-36-72-58 40-6 70 16 72 58Z"/><path d="M154 105c41-22 58-51 64-75-42-1-63 25-64 75Z"/><path d="M194 295c26-37 46-43 64-44-4 38-23 57-64 44Z"/><path d="M150 245c37-27 59-26 81-19-20 33-40 44-81 19Z"/><path d="M154 5c-7 35-8 65 12 94"/></g><g stroke="currentColor" stroke-width="1"><circle cx="43" cy="72" r="5"/><circle cx="169" cy="130" r="5"/><circle cx="224" cy="218" r="4"/><circle cx="200" cy="296" r="6"/><circle cx="92" cy="225" r="3.5"/><path d="M43 60v24M31 72h24M200 282v28m-14-14h28"/></g></svg></div><div class="sky"></div><div class="world-top"><button class="back" data-close><span class="arr">←</span> volver</button><span class="chapter">capítulo iv · siempre</span><span style="width:34px"></span></div>
+<div class="journey-main"><p class="overline">iv · el cielo de las promesas</p><h2 class="world-title" id="siempre-heading">vos <span class="handwritten">podés</span></h2><p class="world-sub">A veces hace falta volver a mirar todo lo que ya pudiste hacer.</p><div class="journey-meter" id="journey-meter"><span>✦</span><span>✦</span><span>✦</span></div><div class="journey-panel" id="journey-panel" aria-live="polite"></div></div></section>
+<div id="page-turn" class="page-turn" aria-hidden="true"><div class="page-mark">✧</div><p id="page-chapter">capítulo</p><h2 id="page-title">nuestros recuerdos</h2><div class="rule"></div></div><div class="preview-switch" id="preview-switch"><span>VISTA PREVIA</span><button data-preview="espejo">Espejo</button><button data-preview="encontrarte">Encontrarte</button><button data-preview="portico">El pórtico</button><button data-preview="siempre">Siempre</button></div>
 <audio id="audio-recuerdos" src="./musica-recuerdos.mp3" loop preload="none"></audio><audio id="audio-encontrarte" src="./musica-encontrarte.mp3" loop preload="none"></audio>
 <script>
 'use strict';
@@ -73,7 +290,7 @@ const $=id=>document.getElementById(id);
 const worlds={espejo:$('espejo'),encontrarte:$('encontrarte'),portico:$('portico'),siempre:$('siempre')};
 let active=null;let previousFocus=null;const audio={recuerdos:$('audio-recuerdos'),encontrarte:$('audio-encontrarte')};let playingAudio=null;
 const normalize=s=>s.trim().toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
-function openWorld(key){if(!worlds[key])return;if(active)closeWorld(false);previousFocus=document.activeElement;active=key;worlds[key].classList.add('active');worlds[key].setAttribute('aria-hidden','false');document.body.style.overflow='hidden';worlds[key].scrollTop=0; if(key==='espejo')setupMirror(); if(key==='encontrarte')resetFlowers(); if(key==='portico')resetQuiz();if(key==='siempre')renderJourney(0);const back=worlds[key].querySelector('[data-close]');if(back)back.focus({preventScroll:true});}
+function openWorld(key){if(!worlds[key])return;showChapter(key);if(active)closeWorld(false);previousFocus=document.activeElement;active=key;worlds[key].classList.add('active');worlds[key].setAttribute('aria-hidden','false');document.body.style.overflow='hidden';worlds[key].scrollTop=0; if(key==='espejo')setupMirror(); if(key==='encontrarte')resetFlowers(); if(key==='portico')resetQuiz();if(key==='siempre')renderJourney(0);const back=worlds[key].querySelector('[data-close]');if(back)back.focus({preventScroll:true});}
 function closeWorld(restore=true){if(!active)return;worlds[active].classList.remove('active');worlds[active].setAttribute('aria-hidden','true');if(active==='encontrarte'){$('final-video').pause();}Object.values(audio).forEach(a=>{a.pause();a.currentTime=0});playingAudio=null;document.querySelectorAll('.sound').forEach(b=>b.textContent='♫');active=null;document.body.style.overflow='';$('secret').value='';if(restore)(previousFocus||$('secret')).focus({preventScroll:true});}
 $('key-form').addEventListener('submit',e=>{e.preventDefault();const word=normalize($('secret').value);const key=word==='el gran portico'?'portico':word;if(worlds[key]){openWorld(key);$('key-error').classList.remove('show');}else{$('key-error').classList.add('show');}});
 $('secret').addEventListener('input',()=>$('key-error').classList.remove('show'));
@@ -97,11 +314,41 @@ $('show-video').addEventListener('click',()=>{$('show-video').style.display='non
 $('final-video').addEventListener('play',()=>{if(!audio.encontrarte.paused)audio.encontrarte.volume=.03;});$('final-video').addEventListener('pause',()=>{if(!audio.encontrarte.paused)audio.encontrarte.volume=.10;});
 /* PORTICO: se conservan las preguntas y opciones originales */
 const quizData=[{level:'básico',question:'¿En qué departamento y piso vivíamos?',answers:['depto 10, PB','depto 12, piso 2','depto 1, piso 10'],correct:0},{level:'básico',question:'¿Qué día fue nuestro primer beso?',answers:['12 de octubre de 2024','22 de octubre de 2024','22 de noviembre de 2024'],correct:1},{level:'básico',question:'¿Qué deporte me encanta hacer cuando vamos a la nieve?',answers:['ski','snow','surf'],correct:1},{level:'simple',question:'¿En qué barrio vivía mamá?',answers:['Santa Rita','400 viviendas','La Quinta'],correct:1},{level:'simple',question:'¿De qué color es la casa de la nona?',answers:['rosa pastel','rosa cremita','rosa viejo'],correct:1},{level:'simple',question:'¿Qué yerba tomaba en Argentina?',answers:['Amanda','Canarias','Playadito'],correct:0},{level:'pro',question:'¿Cuál es mi color favorito?',answers:['verde oscuro','azul marino','gris'],correct:1},{level:'pro',question:'¿A qué lugar soñamos con viajar?',answers:['Hawái','Roma','París'],correct:0},{level:'pro',question:'¿Cuál fue mi primer trabajo al dejar network marketing?',answers:['Picasso','Punto G','Maja Morena'],correct:0}];let quizIndex=0;
-function resetQuiz(){quizIndex=0;$('quiz-active').style.display='';$('quiz-finish').classList.remove('show');$('arch').classList.remove('open');$('arch-caption').textContent='cada respuesta abre un poquito más la puerta';renderQuiz();}
-function renderQuiz(){const q=quizData[quizIndex];if(!q){$('quiz-active').style.display='none';$('quiz-finish').classList.add('show');$('arch').classList.add('open');$('arch-caption').textContent='ya tenés la llave de nuestra historia ♡';return;}$('quiz-count').textContent='nivel '+q.level+' · pregunta '+String(quizIndex+1).padStart(2,'0')+' de 09';$('quiz-question').textContent=q.question;$('quiz-feedback').textContent='';$('quiz-progress').replaceChildren(...quizData.map((_,i)=>{const s=document.createElement('span');if(i<=quizIndex)s.className='done';return s;}));const options=$('quiz-options');options.replaceChildren();q.answers.forEach((answer,i)=>{const b=document.createElement('button');b.textContent=answer;b.type='button';b.addEventListener('click',()=>{if(i!==q.correct){$('quiz-feedback').textContent='casi... probá otra vez ♡';b.classList.add('wrong');setTimeout(()=>b.classList.remove('wrong'),450);return;}quizIndex++;renderQuiz();});options.append(b);});}
+function resetQuiz(){quizIndex=0;$('arch').style.setProperty('--unlock','0');$('quiz-active').style.display='';$('quiz-finish').classList.remove('show');$('arch').classList.remove('open');$('arch-caption').textContent='cada respuesta abre un poquito más la puerta';renderQuiz();}
+function renderQuiz(){const q=quizData[quizIndex];if(!q){$('quiz-active').style.display='none';$('quiz-finish').classList.add('show');$('arch').classList.add('open');$('arch-caption').textContent='ya tenés la llave de nuestra historia ♡';return;}$('quiz-count').textContent='nivel '+q.level+' · pregunta '+String(quizIndex+1).padStart(2,'0')+' de 09';$('quiz-question').textContent=q.question;$('quiz-feedback').textContent='';$('quiz-progress').replaceChildren(...quizData.map((_,i)=>{const s=document.createElement('span');if(i<=quizIndex)s.className='done';return s;}));const options=$('quiz-options');options.replaceChildren();q.answers.forEach((answer,i)=>{const b=document.createElement('button');b.textContent=answer;b.type='button';b.addEventListener('click',()=>{if(i!==q.correct){$('quiz-feedback').textContent='casi... probá otra vez ♡';b.classList.add('wrong');setTimeout(()=>b.classList.remove('wrong'),450);return;}quizIndex++;$('arch').style.setProperty('--unlock',String(quizIndex/9));renderQuiz();});options.append(b);});}
 /* SIEMPRE: todas las fotos y mensajes de apoyo originales */
 const journeyStages=[{label:'constelación i · lo que ya superaste',title:'Mirá todo lo que fuiste capaz de atravesar.',desc:'Este es un recuerdo para que no te olvides de algo importante: vos realmente podés con todo. Como en ese momento, que estabas bancando un montón y, aun así, seguiste.',images:['siempre-1.jpg','siempre-2.jpg','siempre-3.jpg'],button:'seguir nuestro camino →'},{label:'constelación ii · nuevos comienzos',title:'Y después vino otro desafío.',desc:'Esto fue cuando cruzamos el país de un día para el otro para poder hacer la residencia. Y lo hicimos.',images:['siempre-4.jpg','siempre-5.jpg'],button:'una última estrella →'},{label:'constelación iii · para que no lo olvides',title:'Vos siempre vas a ser capaz de hacer lo que quieras, siempre y cuando te lo propongas.',desc:'Que nunca se te olvide. Yo estoy para acompañarte.',images:['siempre-3.jpg'],button:'volver a ver nuestros recuerdos ↺'}];let journeyIndex=0;
 function renderJourney(i){journeyIndex=i;const s=journeyStages[i],panel=$('journey-panel');panel.replaceChildren();const photos=document.createElement('div');photos.className='journey-photos';s.images.forEach(name=>{const figure=document.createElement('figure');figure.className='polaroid';const img=document.createElement('img');img.src='./'+name;img.alt='Una foto nuestra, parte de este recuerdo';img.loading='lazy';figure.append(img);photos.append(figure);});const over=document.createElement('div');over.className='overline';over.textContent=s.label;const title=document.createElement('h3');title.textContent=s.title;const desc=document.createElement('p');desc.textContent=s.desc;const next=document.createElement('button');next.className='pill';next.textContent=s.button;next.addEventListener('click',()=>{renderJourney((journeyIndex+1)%journeyStages.length);worlds.siempre.scrollTo({top:0,behavior:'smooth'});});panel.append(photos,over,title,desc,next);$('journey-meter').querySelectorAll('span').forEach((x,j)=>x.classList.toggle('done',j<=i));}
+
+/* Storybook transitions, decorative fairy lights, and story-specific scene dressing. */
+const chapterLabels={
+ espejo:['CAPÍTULO PRIMERO','El espejo encantado'],
+ encontrarte:['CAPÍTULO SEGUNDO','El jardín de las promesas'],
+ portico:['CAPÍTULO TERCERO','El gran pórtico'],
+ siempre:['CAPÍTULO CUARTO','Nuestra constelación']
+};
+function showChapter(key){
+ const chapter=chapterLabels[key];if(!chapter)return;
+ $('page-chapter').textContent=chapter[0];$('page-title').textContent=chapter[1];
+ const veil=$('page-turn');veil.classList.remove('is-turning');void veil.offsetWidth;
+ veil.classList.add('is-turning');
+}
+for(const [worldIndex,world] of Object.values(worlds).entries()){
+ const field=world.querySelector('.fairy-sparks');
+ if(!field)continue;
+ const count=worldIndex===1?15:24;
+ for(let i=0;i<count;i++){
+  const spark=document.createElement('i'),seed=(i*137+worldIndex*29)%101;
+  spark.style.setProperty('--x',(8+(seed*37)%87)+'%');
+  spark.style.setProperty('--y',(5+(seed*29)%86)+'%');
+  spark.style.setProperty('--w',(2+(i%4)*1.25)+'px');
+  spark.style.setProperty('--d',(4+i%6)+'s');
+  spark.style.setProperty('--delay',(-i*.33)+'s');
+  spark.style.setProperty('--move',((i%2?1:-1)*(8+i%9))+'px');
+  field.appendChild(spark);
+ }
+}
+
 </script>
 </body>
 </html>
