@@ -284,6 +284,67 @@ background-size:100% 100%}
  #home .book-flourish{letter-spacing:.06em}
 }
 
+
+/* ANIVERSARIO 23/11 · papiro interactivo */
+#aniversario{background:
+radial-gradient(circle at 50% 12%,rgba(149,95,100,.28),transparent 27%),
+radial-gradient(circle at 14% 28%,rgba(223,183,154,.10),transparent 23%),
+linear-gradient(180deg,#1d171b 0%,#171318 58%,#0f0d11 100%);color:#f8eddd}
+#aniversario:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.34;background:
+radial-gradient(1px 1px at 15% 17%,#fff4dc 99%,transparent),
+radial-gradient(1px 1px at 74% 13%,#fff4dc 99%,transparent),
+radial-gradient(2px 2px at 89% 31%,#f4d7c3 99%,transparent),
+radial-gradient(1px 1px at 25% 67%,#fff4dc 99%,transparent),
+radial-gradient(2px 2px at 64% 76%,#f4d7c3 99%,transparent),
+radial-gradient(1px 1px at 44% 43%,#fff4dc 99%,transparent)}
+#aniversario .world-top{color:#f7ead8}
+.anniv-main{width:min(100%,930px);margin:auto;padding:2vh 18px 90px;text-align:center}
+.anniv-head{max-width:650px;margin:0 auto 25px}
+.anniv-head .overline{color:#d9b997}
+.anniv-head h2{font:500 clamp(4rem,10vw,7rem)/.82 var(--serif);letter-spacing:-.055em;margin:0 0 18px;color:#fff7e9}
+.anniv-head p{font:400 clamp(1.22rem,2.8vw,1.7rem)/1.25 var(--serif);color:#e7d5c8;max-width:520px;margin:0 auto}
+.anniv-guide{min-height:46px;margin:20px auto 17px;color:#e8d6c4;font-size:12px;letter-spacing:.045em;line-height:1.55}
+.anniv-stage{width:min(95vw,760px);margin:auto;position:relative;display:flex;flex-direction:column;align-items:center}
+.anniv-closed{width:min(92vw,710px);height:230px;position:relative;filter:drop-shadow(0 26px 42px #0008);transition:opacity .6s,transform .8s var(--ease)}
+.anniv-closed.hide{opacity:0;transform:scale(.94) translateY(-8px);pointer-events:none;position:absolute}
+.anniv-roll{position:absolute;inset:0;background:
+linear-gradient(180deg,#f0dfbd,#e4c995 58%,#d1ad73);border-radius:19px;box-shadow:
+inset 0 0 0 1px #74471e2c,inset 0 18px 28px #fff3,inset 0 -18px 25px #6a3e1b22}
+.anniv-roll:before,.anniv-roll:after{content:"";position:absolute;top:-4px;bottom:-4px;width:79px;border-radius:18px;background:linear-gradient(90deg,#8d5a32,#c2945f 45%,#7d4e2a);box-shadow:inset 8px 0 12px #fff2,inset -9px 0 12px #0002}
+.anniv-roll:before{left:-5px}.anniv-roll:after{right:-5px}
+.anniv-rope-v,.anniv-rope-h{position:absolute;z-index:3;background:linear-gradient(90deg,#70431f,#b57c46 42%,#76502e);border-radius:999px;box-shadow:0 2px 4px #0005,inset 0 2px 2px #fff2}
+.anniv-rope-v{width:15px;height:100%;left:calc(50% - 7px);top:0}
+.anniv-rope-h{height:15px;width:224px;left:calc(50% - 112px);top:calc(50% - 7px)}
+.anniv-knot{position:absolute;z-index:5;width:56px;height:56px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 30%,#c99763,#8f5a2e 60%,#6d3f1d);color:#f9e2b7;box-shadow:0 8px 18px #0005,inset 0 2px 4px #fff3;transition:transform .22s,opacity .4s;display:grid;place-items:center;font-size:18px}
+.anniv-knot:hover{transform:scale(1.07)}.anniv-knot.done{opacity:.13;transform:scale(.75);pointer-events:none}
+.anniv-knot[data-knot="1"]{left:calc(50% - 142px);top:calc(50% - 28px)}
+.anniv-knot[data-knot="2"]{left:calc(50% - 28px);top:calc(50% - 28px)}
+.anniv-knot[data-knot="3"]{right:calc(50% - 142px);top:calc(50% - 28px)}
+.anniv-unroll{margin-top:21px;display:none}.anniv-unroll.show{display:inline-block;animation:floatIn .5s both}
+.anniv-letter{display:none;width:min(94vw,790px);transform-origin:top center}
+.anniv-letter.show{display:block;animation:annivUnroll 1.15s cubic-bezier(.18,.84,.22,1) both}
+.anniv-paper{position:relative;text-align:left;color:#4b301d;background:
+linear-gradient(180deg,#f4e4c5 0%,#ecd5a9 15%,#e6c997 87%,#d8b77e 100%);border-radius:14px;padding:54px clamp(23px,5vw,52px) 46px;box-shadow:
+0 25px 60px #0007,inset 0 0 0 1px #6f441f2b,inset 0 18px 35px #fff3,inset 0 -20px 32px #6e431d20;overflow:hidden}
+.anniv-paper:before,.anniv-paper:after{content:"";position:absolute;left:0;right:0;height:23px;background:linear-gradient(180deg,#b8844f,#7e512b 70%,#65401f);box-shadow:inset 0 3px 3px #fff2,inset 0 -3px 4px #0003}
+.anniv-paper:before{top:0}.anniv-paper:after{bottom:0}
+.anniv-paper-text{white-space:pre-line;font:500 clamp(1.18rem,2.5vw,1.47rem)/1.8 var(--serif);letter-spacing:.003em;text-shadow:0 1px #fff5}
+.anniv-video-wrap{text-align:center;margin-top:34px;padding-top:27px;border-top:1px solid #6f4c2f35}
+.anniv-video-link{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:100px;background:#4c2f24;color:#fff3df;padding:16px 25px;font:600 12px var(--sans);letter-spacing:.04em;box-shadow:0 9px 26px #3d241b3a;transition:transform .25s,background .25s}
+.anniv-video-link:hover{transform:translateY(-2px);background:#5a382a}
+.anniv-yt{position:fixed;width:1px;height:1px;left:-9999px;top:-9999px;opacity:.01;pointer-events:none}
+@keyframes annivUnroll{0%{opacity:0;transform:scaleY(.04) translateY(-80px)}50%{opacity:1}100%{opacity:1;transform:scaleY(1) translateY(0)}}
+@media(max-width:560px){
+ .anniv-main{padding-left:12px;padding-right:12px}
+ .anniv-head h2{font-size:clamp(4.1rem,18vw,5.8rem)}
+ .anniv-closed{height:205px}
+ .anniv-rope-h{width:182px;left:calc(50% - 91px)}
+ .anniv-knot[data-knot="1"]{left:calc(50% - 119px)}
+ .anniv-knot[data-knot="3"]{right:calc(50% - 119px)}
+ .anniv-paper{padding:48px 20px 42px}
+ .anniv-paper-text{font-size:1.16rem;line-height:1.72}
+}
+
 </style>
 </head>
 <body>
@@ -316,20 +377,171 @@ background-size:100% 100%}
 <!-- SIEMPRE -->
 <section class="world" id="siempre" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="siempre-heading"><div class="fairy-sparks" aria-hidden="true"></div><div class="fairy-vine left" aria-hidden="true"><svg viewBox="0 0 260 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M3 480C67 393 32 299 92 221S174 99 154 5"/><path d="M23 454C89 390 145 366 193 299"/><path d="M67 355C111 333 142 291 151 245"/><path d="M98 218C30 174 28 121 41 73"/><path d="M151 108C190 132 215 170 225 220"/><path d="M38 405c38-16 45-43 43-64-41 2-53 30-43 64Z"/><path d="M75 320c45-3 65-29 76-53-41-9-68 15-76 53Z"/><path d="M99 214c-47-3-66-36-72-58 40-6 70 16 72 58Z"/><path d="M154 105c41-22 58-51 64-75-42-1-63 25-64 75Z"/><path d="M194 295c26-37 46-43 64-44-4 38-23 57-64 44Z"/><path d="M150 245c37-27 59-26 81-19-20 33-40 44-81 19Z"/><path d="M154 5c-7 35-8 65 12 94"/></g><g stroke="currentColor" stroke-width="1"><circle cx="43" cy="72" r="5"/><circle cx="169" cy="130" r="5"/><circle cx="224" cy="218" r="4"/><circle cx="200" cy="296" r="6"/><circle cx="92" cy="225" r="3.5"/><path d="M43 60v24M31 72h24M200 282v28m-14-14h28"/></g></svg></div><div class="fairy-vine right" aria-hidden="true"><svg viewBox="0 0 260 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><path d="M3 480C67 393 32 299 92 221S174 99 154 5"/><path d="M23 454C89 390 145 366 193 299"/><path d="M67 355C111 333 142 291 151 245"/><path d="M98 218C30 174 28 121 41 73"/><path d="M151 108C190 132 215 170 225 220"/><path d="M38 405c38-16 45-43 43-64-41 2-53 30-43 64Z"/><path d="M75 320c45-3 65-29 76-53-41-9-68 15-76 53Z"/><path d="M99 214c-47-3-66-36-72-58 40-6 70 16 72 58Z"/><path d="M154 105c41-22 58-51 64-75-42-1-63 25-64 75Z"/><path d="M194 295c26-37 46-43 64-44-4 38-23 57-64 44Z"/><path d="M150 245c37-27 59-26 81-19-20 33-40 44-81 19Z"/><path d="M154 5c-7 35-8 65 12 94"/></g><g stroke="currentColor" stroke-width="1"><circle cx="43" cy="72" r="5"/><circle cx="169" cy="130" r="5"/><circle cx="224" cy="218" r="4"/><circle cx="200" cy="296" r="6"/><circle cx="92" cy="225" r="3.5"/><path d="M43 60v24M31 72h24M200 282v28m-14-14h28"/></g></svg></div><div class="sky"></div><div class="world-top"><button class="back" data-close><span class="arr">←</span> volver</button><span class="chapter">capítulo iv · mi AMOR</span><span style="width:34px"></span></div>
 <div class="journey-main"><p class="overline">iv · un rincón para vos</p><h2 class="world-title" id="siempre-heading">mi <span class="handwritten">AMOR</span></h2><p class="world-sub">Para que nunca te olvides de todo lo que sos y todo lo que ya lograste.</p><div class="journey-meter" id="journey-meter"><span>✦</span><span>✦</span><span>✦</span></div><div class="journey-panel" id="journey-panel" aria-live="polite"></div></div></section>
+
+<!-- ANIVERSARIO 23/11 -->
+<section class="world" id="aniversario" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="anniv-heading">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="world-top">
+    <button class="back" data-close><span class="arr">←</span> volver</button>
+    <span class="chapter">capítulo v · 23/11</span>
+    <button class="sound" id="anniv-sound" type="button" aria-label="silenciar música">♪</button>
+  </div>
+  <div class="anniv-main">
+    <header class="anniv-head">
+      <p class="overline">v · un pedacito de nosotros</p>
+      <h2 id="anniv-heading">feliz <span class="handwritten">mes</span></h2>
+      <p>esta vez nos toca festejar a la distancia, así que te guardé algo acá</p>
+    </header>
+
+    <p class="anniv-guide" id="anniv-guide">hacé clic en los tres nudos para desatar el papiro</p>
+
+    <div class="anniv-stage">
+      <div class="anniv-closed" id="anniv-closed" aria-label="papiro atado">
+        <div class="anniv-roll"></div>
+        <div class="anniv-rope-v"></div>
+        <div class="anniv-rope-h"></div>
+        <button class="anniv-knot" data-knot="1" type="button" aria-label="desatar primer nudo">✦</button>
+        <button class="anniv-knot" data-knot="2" type="button" aria-label="desatar segundo nudo">✦</button>
+        <button class="anniv-knot" data-knot="3" type="button" aria-label="desatar tercer nudo">✦</button>
+      </div>
+
+      <button class="pill anniv-unroll" id="anniv-unroll" type="button">desenrollar el papiro</button>
+
+      <article class="anniv-letter" id="anniv-letter">
+        <div class="anniv-paper">
+          <div class="anniv-paper-text">mi amor
+
+no sé si existe una forma perfecta de empezar esta carta, pero sí sé que quería escribirte algo que salga de verdad, algo que nazca del corazón
+
+a veces me pongo a pensar en nosotros, en cómo empezó todo, en cómo nos fuimos encontrando casi sin darnos cuenta y en cómo, poco a poco, te fuiste volviendo una de las personas más importantes de mi vida
+
+vivimos muchísimas cosas juntos
+
+momentos hermosos, momentos difíciles, cambios, mudanzas, risas, charlas, planes, miedos, sueños y etapas que de una forma u otra nos fueron haciendo crecer
+
+y cuando miro todo lo que vivimos, hay algo que siempre termino pensando
+
+nuestra historia nunca fue perfecta, pero siempre fue nuestra
+
+y eso para mí vale muchísimo
+
+porque detrás de cada lugar, cada recuerdo, cada noche juntos, cada boludez que nos hizo reír y cada momento complicado, estuvimos nosotros intentando aprender a querernos de la mejor manera que sabíamos
+
+vos no sos solamente mi novia
+
+sos una persona que dejó una huella enorme en mí, que me acompañó, que me enseñó un montón de cosas y con la que compartí una parte de mi vida que jamás voy a olvidar
+
+hay recuerdos con vos que podría vivir mil veces más
+
+hay momentos que todavía puedo cerrar los ojos y sentir como si hubieran pasado ayer
+
+y hay pequeñas cosas tuyas que probablemente vos ni siquiera notes, pero que son exactamente las que hacen que seas vos y las que hicieron que me enamorara
+
+hoy nos toca festejar de una manera distinta
+
+separados por kilómetros, viviendo cosas diferentes y creciendo cada uno desde su lugar
+
+y aunque obviamente preferiría poder abrazarte, también quiero aprender a valorar esta etapa por lo que puede enseñarnos
+
+no sé exactamente cómo van a ser todos los capítulos que vienen y creo que tampoco necesitamos saberlo ahora
+
+solamente sé que quiero seguir creciendo, construyéndome, viviendo cosas nuevas y seguir teniendo la suerte de compartir una parte de ese camino con vos
+
+gracias por cada recuerdo
+
+gracias por cada risa
+
+gracias por todo lo que vivimos
+
+gracias por ser vos
+
+y gracias por seguir formando parte de mi historia
+
+feliz mes, mi amor
+
+te amo muchísimo</div>
+          <div class="anniv-video-wrap">
+            <a class="anniv-video-link" href="https://youtu.be/XZTPi7ilh3I" target="_blank" rel="noopener">hacé clic aquí para ver el video ↗</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+  <iframe
+    id="anniv-youtube"
+    class="anniv-yt"
+    title="him & i"
+    src="https://www.youtube.com/embed/SA7AIQw-7Ms?enablejsapi=1&controls=0&loop=1&playlist=SA7AIQw-7Ms&playsinline=1&rel=0"
+    allow="autoplay; encrypted-media"
+    tabindex="-1"
+    aria-hidden="true"></iframe>
+</section>
+
 <div id="page-turn" class="page-turn" aria-hidden="true"><div class="page-mark">✧</div><p id="page-chapter">capítulo</p><h2 id="page-title">nuestros recuerdos</h2><div class="rule"></div></div>
 <audio id="audio-recuerdos" src="./musica-recuerdos.mp3" loop preload="none"></audio><audio id="audio-encontrarte" src="./musica-encontrarte.mp3" loop preload="none"></audio>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
-const worlds={espejo:$('espejo'),encontrarte:$('encontrarte'),portico:$('portico'),siempre:$('siempre')};
+const worlds={espejo:$('espejo'),encontrarte:$('encontrarte'),portico:$('portico'),siempre:$('siempre'),'23/11':$('aniversario')};
 let active=null;let previousFocus=null;const audio={recuerdos:$('audio-recuerdos'),encontrarte:$('audio-encontrarte')};let playingAudio=null;
+
+let annivUntied=0,annivMuted=false;
+function annivCommand(func,args=[]){
+ const frame=$('anniv-youtube');
+ if(!frame||!frame.contentWindow)return;
+ frame.contentWindow.postMessage(JSON.stringify({event:'command',func:func,args:args}),'*');
+}
+function startAnniversaryMusic(){
+ annivMuted=false;
+ $('anniv-sound').textContent='♪';
+ $('anniv-sound').setAttribute('aria-label','silenciar música');
+ setTimeout(()=>{annivCommand('unMute');annivCommand('setVolume',[28]);annivCommand('playVideo');},180);
+}
+function stopAnniversaryMusic(){annivCommand('pauseVideo');}
+function resetAnniversary(){
+ annivUntied=0;
+ $('anniv-guide').textContent='hacé clic en los tres nudos para desatar el papiro';
+ $('anniv-closed').classList.remove('hide');
+ $('anniv-unroll').classList.remove('show');
+ $('anniv-letter').classList.remove('show');
+ document.querySelectorAll('.anniv-knot').forEach(k=>k.classList.remove('done'));
+}
+
 const normalize=s=>s.trim().toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
-function openWorld(key){if(!worlds[key])return;showChapter(key);if(active)closeWorld(false);previousFocus=document.activeElement;active=key;worlds[key].classList.add('active');worlds[key].setAttribute('aria-hidden','false');document.body.style.overflow='hidden';worlds[key].scrollTop=0; if(key==='espejo')setupMirror(); if(key==='encontrarte')resetFlowers(); if(key==='portico')resetQuiz();if(key==='siempre')renderJourney(0);const back=worlds[key].querySelector('[data-close]');if(back)back.focus({preventScroll:true});}
-function closeWorld(restore=true){if(!active)return;worlds[active].classList.remove('active');worlds[active].setAttribute('aria-hidden','true');if(active==='encontrarte'){$('final-video').pause();}Object.values(audio).forEach(a=>{a.pause();a.currentTime=0});playingAudio=null;document.querySelectorAll('.sound').forEach(b=>b.textContent='♫');active=null;document.body.style.overflow='';$('secret').value='';if(restore)(previousFocus||$('secret')).focus({preventScroll:true});}
+function openWorld(key){if(!worlds[key])return;showChapter(key);if(active)closeWorld(false);previousFocus=document.activeElement;active=key;worlds[key].classList.add('active');worlds[key].setAttribute('aria-hidden','false');document.body.style.overflow='hidden';worlds[key].scrollTop=0; if(key==='espejo')setupMirror(); if(key==='encontrarte')resetFlowers(); if(key==='portico')resetQuiz();if(key==='siempre')renderJourney(0);if(key==='23/11'){resetAnniversary();startAnniversaryMusic();}const back=worlds[key].querySelector('[data-close]');if(back)back.focus({preventScroll:true});}
+function closeWorld(restore=true){if(!active)return;worlds[active].classList.remove('active');worlds[active].setAttribute('aria-hidden','true');if(active==='encontrarte'){$('final-video').pause();}if(active==='23/11')stopAnniversaryMusic();Object.values(audio).forEach(a=>{a.pause();a.currentTime=0});playingAudio=null;document.querySelectorAll('.sound').forEach(b=>b.textContent='♫');active=null;document.body.style.overflow='';$('secret').value='';if(restore)(previousFocus||$('secret')).focus({preventScroll:true});}
 $('key-form').addEventListener('submit',e=>{e.preventDefault();const word=normalize($('secret').value);const key=word==='el gran portico'?'portico':word==='mi amor'?'siempre':word;if(word!=='siempre'&&worlds[key]){openWorld(key);$('key-error').classList.remove('show');}else{$('key-error').classList.add('show');}});
 $('secret').addEventListener('input',()=>$('key-error').classList.remove('show'));
 document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeWorld()));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&active)closeWorld();});
+
+/* ANIVERSARIO 23/11 */
+document.querySelectorAll('.anniv-knot').forEach(knot=>knot.addEventListener('click',()=>{
+ if(knot.classList.contains('done'))return;
+ knot.classList.add('done');
+ annivUntied++;
+ if(annivUntied===1)$('anniv-guide').textContent='bien amor, faltan dos nudos';
+ if(annivUntied===2)$('anniv-guide').textContent='uno más y ya podés abrirlo';
+ if(annivUntied===3){
+   $('anniv-guide').textContent='listo, ahora desenrollá el papiro';
+   $('anniv-unroll').classList.add('show');
+ }
+}));
+$('anniv-unroll').addEventListener('click',()=>{
+ $('anniv-closed').classList.add('hide');
+ $('anniv-unroll').classList.remove('show');
+ $('anniv-letter').classList.add('show');
+ $('anniv-guide').textContent='ahora sí, esto es para vos';
+ setTimeout(()=>$('anniv-letter').scrollIntoView({behavior:'smooth',block:'start'}),250);
+});
+$('anniv-sound').addEventListener('click',()=>{
+ annivMuted=!annivMuted;
+ annivCommand(annivMuted?'mute':'unMute');
+ if(!annivMuted)annivCommand('playVideo');
+ $('anniv-sound').textContent=annivMuted?'♫':'♪';
+ $('anniv-sound').setAttribute('aria-label',annivMuted?'activar música':'silenciar música');
+});
+
 for(const btn of document.querySelectorAll('[data-sound]'))btn.addEventListener('click',async()=>{const key=btn.dataset.sound;const track=audio[key];if(!track)return;if(playingAudio===key&&!track.paused){track.pause();playingAudio=null;btn.textContent='♫';return;}Object.values(audio).forEach(x=>x.pause());track.volume=key==='encontrarte'?.10:.16;try{await track.play();playingAudio=key;document.querySelectorAll('[data-sound]').forEach(x=>x.textContent='♫');btn.textContent='♪';}catch(e){btn.title='Usá este botón para iniciar la música';}});
 
 /* ESPEJO: borrar el vapor para descubrir una foto real */
@@ -359,7 +571,8 @@ const chapterLabels={
  espejo:['CAPÍTULO PRIMERO','El espejo encantado'],
  encontrarte:['CAPÍTULO SEGUNDO','El jardín de las promesas'],
  portico:['CAPÍTULO TERCERO','El gran pórtico'],
- siempre:['CAPÍTULO CUARTO','mi AMOR']
+ siempre:['CAPÍTULO CUARTO','mi AMOR'],
+ '23/11':['CAPÍTULO QUINTO','feliz mes, mi amor']
 };
 function showChapter(key){
  const chapter=chapterLabels[key];if(!chapter)return;
